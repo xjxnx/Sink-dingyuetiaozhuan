@@ -3,7 +3,7 @@ export default defineAppConfig({
   documentation: 'https://github.com/xjxnx/Sink-dingyuetiaozhuan/tree/master/docs',
   github: 'https://github.com/xjxnx/Sink-dingyuetiaozhuan',
   githubBranch: 'master',
-  coffee: '',
+  coffee: 'https://www.paypal.com/ncp/payment/ZD9FZ84DDQ4TN',
   twitter: '',
   telegram: '',
   description: 'A Simple / Speedy / Secure Link Shortener with Analytics, 100% run on Cloudflare.',
