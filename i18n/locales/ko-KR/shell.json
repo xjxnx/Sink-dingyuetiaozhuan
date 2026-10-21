@@ -1,6 +1,7 @@
 {
   "layouts": {
     "footer": {
+      "coffee": "커피 한 잔 사주기",
       "social": {
         "email": "이메일",
         "telegram": "텔레그램",

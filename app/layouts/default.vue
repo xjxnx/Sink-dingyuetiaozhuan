@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ExternalLink, Menu, Star } from '@lucide/vue'
+import { Coffee, ExternalLink, Menu, Star } from '@lucide/vue'
 import NumberFlow from '@number-flow/vue'
 import { GitHubIcon, TelegramIcon, XIcon } from 'vue3-simple-icons'
 import {
@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/sheet'
 
 const mobileMenuOpen = shallowRef(false)
-const { title, documentation, telegram, twitter, github } = useAppConfig()
+const { title, documentation, telegram, twitter, github, coffee } = useAppConfig()
 const { rawStats } = useGithubStats()
 
 function closeMobileMenu() {
@@ -323,6 +323,17 @@ function closeMobileMenu() {
                 :aria-label="$t('layouts.footer.social.github')"
               >
                 <GitHubIcon aria-hidden="true" />
+              </a>
+            </Button>
+            <Button v-if="coffee" as-child variant="outline">
+              <a
+                :href="coffee"
+                target="_blank"
+                rel="noopener noreferrer"
+                :aria-label="$t('layouts.footer.coffee')"
+              >
+                <Coffee aria-hidden="true" />
+                {{ $t('layouts.footer.coffee') }}
               </a>
             </Button>
           </nav>

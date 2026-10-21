@@ -1,6 +1,7 @@
 {
   "layouts": {
     "footer": {
+      "coffee": "Offrimi un caffè",
       "social": {
         "email": "Email",
         "telegram": "Telegram",
