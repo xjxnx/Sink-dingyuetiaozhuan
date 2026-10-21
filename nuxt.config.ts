@@ -88,8 +88,8 @@ export default defineNuxtConfig({
     openAPI: {
       production: 'runtime',
       meta: {
-        title: 'Sink API',
-        description: 'A Simple / Speedy / Secure Link Shortener with Analytics, 100% run on Cloudflare.\n\n[Return to this Sink instance](/) · [Read the documentation](https://docs.sink.cool)',
+        title: 'ZheLink API',
+        description: 'A Simple / Speedy / Secure Link Shortener with Analytics, 100% run on Cloudflare.\n\n[Return to this ZheLink instance](/) · [Read the documentation](https://github.com/xjxnx/Sink-dingyuetiaozhuan/tree/master/docs)',
       },
       route: '/_docs/openapi.json',
       ui: {

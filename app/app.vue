@@ -41,12 +41,12 @@ useHead(() => ({
     },
     {
       rel: 'icon',
-      type: 'image/png',
-      href: '/icon-192.png',
+      type: 'image/svg+xml',
+      href: '/zhelink.svg',
     },
     {
       rel: 'apple-touch-icon',
-      href: '/apple-touch-icon.png',
+      href: '/zhelink-apple-touch-icon.png',
     },
   ],
 }))

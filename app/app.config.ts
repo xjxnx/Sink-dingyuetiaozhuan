@@ -1,5 +1,5 @@
 export default defineAppConfig({
-  title: 'Sink',
+  title: 'ZheLink',
   documentation: 'https://github.com/xjxnx/Sink-dingyuetiaozhuan/tree/master/docs',
   github: 'https://github.com/xjxnx/Sink-dingyuetiaozhuan',
   githubBranch: 'master',
@@ -7,7 +7,7 @@ export default defineAppConfig({
   twitter: '',
   telegram: '',
   description: 'A Simple / Speedy / Secure Link Shortener with Analytics, 100% run on Cloudflare.',
-  image: '/banner.png',
+  image: '/zhelink-banner.png',
   previewTTL: 300, // 5 minutes
   slugRegex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/i,
   reserveSlug: [

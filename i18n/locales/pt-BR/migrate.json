@@ -68,7 +68,7 @@
       },
       "errors": {
         "invalid_json": "Arquivo JSON inválido",
-        "invalid_format": "Formato de arquivo inválido. Por favor, use um arquivo exportado do Sink.",
+        "invalid_format": "Formato de arquivo inválido. Por favor, use um arquivo exportado do ZheLink.",
         "parse_error": "Falha ao analisar o arquivo",
         "batch_failed": "Este lote de importação falhou."
       }
