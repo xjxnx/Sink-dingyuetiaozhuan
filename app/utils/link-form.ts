@@ -7,6 +7,19 @@ export type LinkUrlValidationError
     | { kind: 'invalid' }
     | { kind: 'too_long', length: number }
 
+export function normalizeLinkFormUrl(value: string): string {
+  const url = value.trim()
+  if (!url)
+    return ''
+
+  // Keep explicit schemes and relative paths for the existing URL validator.
+  const hasPort = /^[^/?#:\s]+:\d+(?:[/?#]|$)/.test(url)
+  if ((!hasPort && /^[a-z][a-z\d+.-]*:/i.test(url)) || /^\/(?!\/)/.test(url))
+    return url
+
+  return url.startsWith('//') ? `https:${url}` : `https://${url}`
+}
+
 export function getLinkUrlValidationError(
   value: unknown,
   maxUrlLength: number,
@@ -15,11 +28,15 @@ export function getLinkUrlValidationError(
   if (typeof value !== 'string')
     return { kind: 'invalid' }
 
-  const url = value.trim()
+  const url = normalizeLinkFormUrl(value)
   if (!url)
     return optional ? undefined : { kind: 'required' }
   if (url.length > maxUrlLength)
     return { kind: 'too_long', length: url.length }
+
+  // URL.canParse also accepts incomplete HTTP prefixes that cannot redirect reliably.
+  if (/^https?:/i.test(url) && !/^https?:\/\/[^/\\]/i.test(url))
+    return { kind: 'invalid' }
 
   return URL.canParse(url) ? undefined : { kind: 'invalid' }
 }
@@ -49,7 +66,7 @@ export function normalizeLinkFormSubmitPayload(value: DashboardLinkFormData, isE
   const geo: Record<string, string> = {}
   value.geo?.forEach((route) => {
     const country = route.country.trim().toUpperCase()
-    const url = route.url.trim()
+    const url = normalizeLinkFormUrl(route.url)
     if (country && url)
       geo[country] = url
   })
@@ -59,13 +76,13 @@ export function normalizeLinkFormSubmitPayload(value: DashboardLinkFormData, isE
     password = undefined
 
   return {
-    url: value.url,
+    url: normalizeLinkFormUrl(value.url),
     slug: value.slug,
     comment: value.comment || undefined,
     tags: value.tags,
     expiration: value.expiration ? date2unix(value.expiration, 'end') : undefined,
-    google: value.google || undefined,
-    apple: value.apple || undefined,
+    google: normalizeLinkFormUrl(value.google) || undefined,
+    apple: normalizeLinkFormUrl(value.apple) || undefined,
     title: value.title || undefined,
     description: value.description || undefined,
     image: value.image || undefined,

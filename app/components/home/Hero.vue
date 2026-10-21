@@ -28,6 +28,7 @@ const { title, description, github, twitter } = useAppConfig()
         >
           <!-- Twitter Follow Badge -->
           <a
+            v-if="twitter"
             :href="twitter"
             target="_blank"
             rel="noopener"

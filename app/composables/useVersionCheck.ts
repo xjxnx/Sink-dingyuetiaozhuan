@@ -1,10 +1,12 @@
 import { version as currentVersion } from '@@/package.json'
 import { computed } from 'vue'
-import { useFetch } from '#imports'
+import { useAppConfig, useFetch } from '#imports'
 
 export function useVersionCheck() {
-  const { data, status } = useFetch<{ version: string }>('https://cdn.jsdelivr.net/gh/miantiao-me/Sink@master/package.json', {
-    key: 'latest-sink-version',
+  const { github, githubBranch } = useAppConfig()
+  const repo = github.replace('https://github.com/', '')
+  const { data, status } = useFetch<{ version: string }>(`https://cdn.jsdelivr.net/gh/${repo}@${githubBranch}/package.json`, {
+    key: `latest-sink-version:${repo}:${githubBranch}`,
     server: false,
     lazy: true,
     dedupe: 'defer',

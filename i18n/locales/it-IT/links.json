@@ -52,9 +52,9 @@
     },
     "form": {
       "url": "URL",
-      "url_description": "Inserisci un URL completo, come https://example.com. Massimo {max} caratteri.",
+      "url_description": "Inserisci un URL come www.example.com; https:// viene aggiunto automaticamente se omesso. Massimo {max} caratteri.",
       "url_required": "L’URL è obbligatorio.",
-      "url_invalid": "Il formato dell’URL non è valido. Inserisci un URL completo, come https://example.com.",
+      "url_invalid": "Formato URL non valido. Inserisci un URL come www.example.com.",
       "url_too_long": "L’URL contiene {length} caratteri, ma il limite è {max}.",
       "slug": "Slug",
       "comment": "Commento",

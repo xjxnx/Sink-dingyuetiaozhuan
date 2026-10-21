@@ -59,7 +59,7 @@ function formatPasswordDisplay(password: string) {
 
 const aiOgPending = ref(false)
 async function aiOg() {
-  const url = props.form.getFieldValue('url') as string
+  const url = normalizeLinkFormUrl(props.form.getFieldValue('url') as string)
   if (!url) {
     return
   }

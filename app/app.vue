@@ -3,6 +3,8 @@ import 'vue-sonner/style.css'
 
 const { title, description, image } = useAppConfig()
 const route = useRoute()
+const requestUrl = useRequestURL()
+const socialImage = new URL(image, requestUrl.origin).href
 const localeHead = useLocaleHead()
 const colorMode = useColorMode()
 
@@ -13,10 +15,10 @@ useSeoMeta({
   ogTitle: title,
   ogSiteName: title,
   ogDescription: description,
-  ogImage: image,
+  ogImage: socialImage,
   twitterTitle: title,
   twitterDescription: description,
-  twitterImage: image,
+  twitterImage: socialImage,
   twitterCard: 'summary_large_image',
 })
 
@@ -35,7 +37,7 @@ useHead(() => ({
   link: [
     {
       rel: 'canonical',
-      href: computed(() => `https://sink.cool${route.path}`),
+      href: `${requestUrl.origin}${route.path}`,
     },
     {
       rel: 'icon',

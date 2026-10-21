@@ -8,7 +8,6 @@
     <HomeLogos />
     <HomeFeatures />
     <HomeStats />
-    <HomeTestimonials />
     <HomeCta />
   </div>
 </template>

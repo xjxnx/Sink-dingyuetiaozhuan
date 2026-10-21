@@ -52,9 +52,9 @@
     },
     "form": {
       "url": "URL",
-      "url_description": "Gib eine vollständige URL wie https://example.com ein. Maximal {max} Zeichen.",
+      "url_description": "Gib eine URL wie www.example.com ein; ohne Protokoll wird https:// automatisch ergänzt. Maximal {max} Zeichen.",
       "url_required": "URL ist erforderlich.",
-      "url_invalid": "Das URL-Format ist ungültig. Gib eine vollständige URL wie https://example.com ein.",
+      "url_invalid": "Ungültiges URL-Format. Gib eine URL wie www.example.com ein.",
       "url_too_long": "Die URL hat {length} Zeichen, das Limit beträgt jedoch {max}.",
       "slug": "Slug",
       "comment": "Kommentar",

@@ -106,7 +106,7 @@ function initializeRandomSlug() {
 
 const aiSlugPending = ref(false)
 async function aiSlug() {
-  const url = form.getFieldValue('url')
+  const url = normalizeLinkFormUrl(form.getFieldValue('url'))
   if (!url)
     return
 
@@ -138,7 +138,7 @@ const findDuplicateLink = useDebounceFn(async (url: string, generation: number) 
     return
 
   try {
-    const match = await linksSearchStore.findDuplicateLink(url, props.link.slug)
+    const match = await linksSearchStore.findDuplicateLink(normalizeLinkFormUrl(url), props.link.slug)
     if (generation === duplicateRequestGeneration && currentUrl.value === url)
       duplicateLink.value = match
   }
@@ -261,7 +261,7 @@ defineExpose({ initializeRandomSlug })
               inputmode="url"
               :model-value="field.state.value"
               :aria-invalid="getAriaInvalid(field)"
-              placeholder="https://example.com"
+              placeholder="www.example.com"
               autocomplete="off"
               @blur="field.handleBlur"
               @input="field.handleChange(($event.target as HTMLInputElement).value)"
@@ -390,7 +390,7 @@ defineExpose({ initializeRandomSlug })
   <DashboardLinksEditorUtmBuilderModal
     v-model:open="utmBuilderOpen"
     :id-prefix="formId"
-    :url="currentUrl"
+    :url="normalizeLinkFormUrl(currentUrl)"
     @apply="applyUtmUrl"
   />
 </template>

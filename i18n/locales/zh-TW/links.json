@@ -52,9 +52,9 @@
     },
     "form": {
       "url": "連結地址",
-      "url_description": "請輸入完整連結，例如 https://example.com，最多 {max} 個字元。",
+      "url_description": "可直接輸入 www.example.com，省略協定時自動補全 https://，最多 {max} 個字元。",
       "url_required": "連結地址不能為空白。",
-      "url_invalid": "連結格式無效，請輸入完整連結，例如 https://example.com。",
+      "url_invalid": "連結格式無效，請輸入有效網址，例如 www.example.com。",
       "url_too_long": "連結長度為 {length} 個字元，超過上限 {max} 個字元。",
       "slug": "短連結",
       "comment": "備註",

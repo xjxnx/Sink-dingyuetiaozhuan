@@ -52,9 +52,9 @@
     },
     "form": {
       "url": "URL",
-      "url_description": "Masukkan URL lengkap, seperti https://example.com. Maksimal {max} karakter.",
+      "url_description": "Masukkan URL seperti www.example.com; https:// ditambahkan otomatis jika protokol tidak diisi. Maksimal {max} karakter.",
       "url_required": "URL wajib diisi.",
-      "url_invalid": "Format URL tidak valid. Masukkan URL lengkap, seperti https://example.com.",
+      "url_invalid": "Format URL tidak valid. Masukkan URL seperti www.example.com.",
       "url_too_long": "URL memiliki {length} karakter, tetapi batasnya {max}.",
       "slug": "Slug",
       "comment": "Catatan",

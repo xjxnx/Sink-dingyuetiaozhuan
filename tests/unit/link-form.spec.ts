@@ -4,6 +4,7 @@ import {
   createLinkFormInitialValues,
   getLinkUrlValidationError,
   normalizeLinkFormSubmitPayload,
+  normalizeLinkFormUrl,
 } from '../../app/utils/link-form'
 import { LINK_PASSWORD_MASK_PREFIX } from '../../shared/utils/link-password'
 
@@ -48,9 +49,30 @@ describe('link form values', () => {
 })
 
 describe('link URL validation', () => {
+  it.each([
+    ['www.hao123.com', 'https://www.hao123.com'],
+    ['www.hao123.com:8443/path', 'https://www.hao123.com:8443/path'],
+    [' example.com/path?a=1&token=a%2Fb#section ', 'https://example.com/path?a=1&token=a%2Fb#section'],
+    ['//example.com/path', 'https://example.com/path'],
+    ['http://example.com/path', 'http://example.com/path'],
+    ['https://example.com/?token=a%2Fb', 'https://example.com/?token=a%2Fb'],
+    ['mailto:test@example.com', 'mailto:test@example.com'],
+    ['', ''],
+  ])('normalizes %s before validation', (input, expected) => {
+    expect(normalizeLinkFormUrl(input)).toBe(expected)
+    if (input)
+      expect(getLinkUrlValidationError(input, 100)).toBeUndefined()
+  })
+
+  it.each(['https:www.hao123.com', 'http:/example.com', 'https:///example.com', 'https://'])('rejects malformed HTTP URL %s', (url) => {
+    expect(getLinkUrlValidationError(url, 100)).toEqual({ kind: 'invalid' })
+  })
+
   it('distinguishes required, invalid, and over-limit URLs', () => {
     expect(getLinkUrlValidationError('  ', 20)).toEqual({ kind: 'required' })
     expect(getLinkUrlValidationError('not a URL', 20)).toEqual({ kind: 'invalid' })
+    expect(getLinkUrlValidationError('/relative/path', 100)).toEqual({ kind: 'invalid' })
+    expect(getLinkUrlValidationError('www.hao123.com', 20)).toEqual({ kind: 'too_long', length: 22 })
     expect(getLinkUrlValidationError('https://example.com/long', 20)).toEqual({
       kind: 'too_long',
       length: 24,
@@ -72,6 +94,22 @@ describe('link form submit payload', () => {
       ...overrides,
     }
   }
+
+  it.each([false, true])('submits absolute destinations when isEdit is %s', (isEdit) => {
+    const payload = normalizeLinkFormSubmitPayload(formValues({
+      url: 'www.hao123.com/path?token=a%2Fb#section',
+      apple: 'apps.apple.com/app/example',
+      google: 'play.google.com/store/apps/example',
+      geo: [{ country: 'cn', url: 'www.hao123.com' }],
+    }), isEdit)
+
+    expect(payload).toMatchObject({
+      url: 'https://www.hao123.com/path?token=a%2Fb#section',
+      apple: 'https://apps.apple.com/app/example',
+      google: 'https://play.google.com/store/apps/example',
+      geo: { CN: 'https://www.hao123.com' },
+    })
+  })
 
   it('preserves an edited masked password by submitting undefined', () => {
     const payload = normalizeLinkFormSubmitPayload(formValues({
@@ -136,7 +174,7 @@ describe('link form submit payload', () => {
 
     expect(createPayload).toMatchObject({
       comment: undefined,
-      google: '   ',
+      google: undefined,
       apple: undefined,
       title: undefined,
       description: undefined,
