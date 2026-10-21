@@ -58,7 +58,11 @@ description: Sink 支持的全部环境变量——做什么、填在哪、什�
 | `DEPLOY_D1_DATABASE_ID`  | 构建时         | Workers Builds 或 Pages 变量 | D1 数据库 ID（在 D1 详情页）   |
 | `DEPLOY_KV_NAMESPACE_ID` | 构建时         | Workers Builds 或 Pages 变量 | KV 命名空间 ID（在 KV 详情页） |
 
-## 推荐配置（访问分析）
+## Required for analytics
+
+Analytics is optional, but **both variables below are required to display statistics**, together with the `ANALYTICS` binding. On Workers, set them in **Settings → Runtime variables and secrets → Production** (also called **Variables and Secrets**); setting them only in Workers Builds is insufficient. On Pages, use the project's **Settings → Variables and Secrets → Production**.
+
+If either runtime credential is missing, queries currently return `{"data":[]}` without a configuration error, so the dashboard can show zero even when the binding records visits. Save and deploy the settings, then verify the result using the [analytics setup guide](/zh-CN/features/analytics).
 
 | 变量                 | 时机           | 放哪里               | 用途                                                        |
 | -------------------- | -------------- | -------------------- | ----------------------------------------------------------- |

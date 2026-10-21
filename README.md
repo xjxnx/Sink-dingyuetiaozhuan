@@ -56,6 +56,19 @@ See the [getting started guide](./docs/guide/getting-started.md) for setup instr
 
 ZheLink supports deployment to [Cloudflare Workers](./docs/deployment/workers.md) (recommended) and [Cloudflare Pages](./docs/deployment/pages.md) (deprecated).
 
+> [!IMPORTANT]
+> **Analytics is optional, but all three settings below are required to use it.** A working short link alone does not confirm that dashboard statistics are configured.
+>
+> | Setting              | What to configure                                                                                                            |
+> | -------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+> | `ANALYTICS`          | Analytics Engine binding; dataset `sink` by default. Keep it aligned with `NUXT_DATASET`.                                    |
+> | `NUXT_CF_ACCOUNT_ID` | Runtime variable containing the Cloudflare account ID that owns the dataset.                                                 |
+> | `NUXT_CF_API_TOKEN`  | Runtime encrypted secret containing a custom API token with **Account → Account Analytics → Read**, limited to that account. |
+>
+> On Workers, add the two `NUXT_CF_*` values under the Worker’s **Settings → Runtime variables and secrets → Production** (also called **Variables and Secrets**). Setting them only in **Builds** is insufficient. On Pages, use the project’s **Settings → Variables and Secrets → Production**. Save and deploy the changes.
+>
+> If either runtime credential is missing, analytics queries currently return `{"data":[]}` without a configuration error, so visits can appear as zero even when the binding has recorded them. Follow the [analytics setup and verification guide](./docs/features/analytics.md).
+
 Local development requires Node.js 24 or newer and pnpm 11.11.0:
 
 ```bash

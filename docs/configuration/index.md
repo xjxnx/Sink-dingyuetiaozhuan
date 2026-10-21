@@ -58,7 +58,11 @@ If you leave it empty, Sink may invent a random password at build time that can 
 | `DEPLOY_D1_DATABASE_ID`  | Build            | Workers Builds or Pages variables    | D1 database ID (from the D1 detail page)  |
 | `DEPLOY_KV_NAMESPACE_ID` | Build            | Workers Builds or Pages variables    | KV namespace ID (from the KV detail page) |
 
-## Recommended (analytics)
+## Required for analytics
+
+Analytics is optional, but **both variables below are required to display statistics**, together with the `ANALYTICS` binding. On Workers, set them in **Settings → Runtime variables and secrets → Production** (also called **Variables and Secrets**); setting them only in Workers Builds is insufficient. On Pages, use the project's **Settings → Variables and Secrets → Production**.
+
+If either runtime credential is missing, queries currently return `{"data":[]}` without a configuration error, so the dashboard can show zero even when the binding records visits. Save and deploy the settings, then verify the result using the [analytics setup guide](/features/analytics).
 
 | Variable             | When             | Where                    | Purpose                                                       |
 | -------------------- | ---------------- | ------------------------ | ------------------------------------------------------------- |

@@ -45,13 +45,21 @@ Add these **build variables** (do **not** put production IDs into tracked `wrang
 
 ## 3. App settings (login password and more)
 
-Under **Settings → Variables and Secrets**, add:
+Under the Worker's **Settings → Runtime variables and secrets → Production** (also called **Variables and Secrets**), add:
 
-| Variable             | Type             | Purpose                                                                                          |
-| -------------------- | ---------------- | ------------------------------------------------------------------------------------------------ |
-| `NUXT_SITE_TOKEN`    | Encrypted secret | Dashboard login password and API password (at least 8 characters, no whitespace, keep it stable) |
-| `NUXT_CF_ACCOUNT_ID` | Variable         | Recommended for analytics                                                                        |
-| `NUXT_CF_API_TOKEN`  | Encrypted secret | Recommended for analytics                                                                        |
+| Variable             | Type             | Purpose                                                                                                   |
+| -------------------- | ---------------- | --------------------------------------------------------------------------------------------------------- |
+| `NUXT_SITE_TOKEN`    | Encrypted secret | Dashboard login password and API password (at least 8 characters, no whitespace, keep it stable)          |
+| `NUXT_CF_ACCOUNT_ID` | Variable         | Required for analytics: Cloudflare account ID that owns the `ANALYTICS` dataset                           |
+| `NUXT_CF_API_TOKEN`  | Encrypted secret | Required for analytics: custom token with **Account → Account Analytics → Read**, limited to that account |
+
+::: warning Analytics requires both runtime credentials
+Analytics is optional, but displaying statistics requires **both** `NUXT_CF_ACCOUNT_ID` and `NUXT_CF_API_TOKEN`, as well as the `ANALYTICS` binding. Adding the credentials only to Workers Builds is insufficient. The deployment token created by Cloudflare does not automatically configure `NUXT_CF_API_TOKEN`.
+
+If either runtime credential is missing, analytics queries currently return `{"data":[]}` without a configuration error. Short links can still redirect and the binding can still record visits while the dashboard shows zero or no data.
+
+Save with **Add variables and deploy** and wait for deployment to finish. Then open a short link and refresh its statistics page after allowing time for Analytics Engine ingestion.
+:::
 
 Analytics details: [Analytics and Realtime](/features/analytics). Full list: [configuration](/configuration/).
 

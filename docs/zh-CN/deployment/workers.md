@@ -47,11 +47,19 @@ description: 通过 Git 集成将 Sink 部署到 Cloudflare Workers。
 
 在 **Settings → Variables and Secrets** 中添加：
 
-| 变量                 | 类型     | 用途                                                               |
-| -------------------- | -------- | ------------------------------------------------------------------ |
-| `NUXT_SITE_TOKEN`    | 加密密钥 | 仪表盘登录密码和 API 密码（至少 8 个字符且不含空白字符，保持稳定） |
-| `NUXT_CF_ACCOUNT_ID` | 变量     | 访问分析推荐                                                       |
-| `NUXT_CF_API_TOKEN`  | 加密密钥 | 访问分析推荐                                                       |
+| 变量                 | 类型     | 用途                                                                                                      |
+| -------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `NUXT_SITE_TOKEN`    | 加密密钥 | 仪表盘登录密码和 API 密码（至少 8 个字符且不含空白字符，保持稳定）                                        |
+| `NUXT_CF_ACCOUNT_ID` | 变量     | Required for analytics: Cloudflare account ID that owns the `ANALYTICS` dataset                           |
+| `NUXT_CF_API_TOKEN`  | 加密密钥 | Required for analytics: custom token with **Account → Account Analytics → Read**, limited to that account |
+
+::: warning Analytics requires both runtime credentials
+Analytics is optional, but displaying statistics requires **both** `NUXT_CF_ACCOUNT_ID` and `NUXT_CF_API_TOKEN`, as well as the `ANALYTICS` binding. Add the two credentials under the Worker's **Settings → Runtime variables and secrets → Production** (also called **Variables and Secrets**). Adding them only to Workers Builds is insufficient. The deployment token created by Cloudflare does not automatically configure `NUXT_CF_API_TOKEN`.
+
+If either runtime credential is missing, analytics queries currently return `{"data":[]}` without a configuration error. Short links can still redirect and the binding can still record visits while the dashboard shows zero or no data.
+
+Save with **Add variables and deploy** and wait for deployment to finish. Then open a short link and refresh its statistics page after allowing time for Analytics Engine ingestion.
+:::
 
 访问分析细节见[访问分析与近实时视图](/zh-CN/features/analytics)。完整列表见[配置参考](/zh-CN/configuration/)。
 
