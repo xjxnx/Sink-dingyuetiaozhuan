@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#fff" />
   <g transform="translate(210 205) scale(1.72)">
-    <circle cx="64" cy="64" r="55" fill="#fff" stroke="#000" stroke-width="8" />
+    <circle cx="64" cy="64" r="55" fill="#5EEAD4" stroke="#000" stroke-width="8" />
     <path d="M40 40h48v10L54 78h34v10H40V78l34-28H40V40Z" fill="#000" />
   </g>
   <text x="480" y="352" font-family="Arial, sans-serif" font-size="104" font-weight="700" fill="#000">ZheLink</text>
