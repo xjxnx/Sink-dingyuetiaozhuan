@@ -1,50 +1,16 @@
-# ⚡ Sink
+# ⚡ ZheLink
 
 **A Simple, Speedy, Secure, and Serverless Link Shortener with Analytics, Running Entirely on Cloudflare.**
 
-[Website](https://sink.cool) · [Documentation](https://docs.sink.cool) · [API Reference](https://sink.cool/_docs/scalar)
+[Documentation](./docs/index.md) · [Deployment](./docs/deployment/workers.md) · [API Reference](./docs/api/index.md)
 
-<a href="https://trendshift.io/repositories/20331" target="_blank">
-  <img
-    src="https://trendshift.io/api/badge/repositories/20331"
-    alt="miantiao-me/Sink | Trendshift"
-    width="250"
-    height="55"
-  />
-</a>
-<a href="https://news.ycombinator.com/item?id=40843683" target="_blank">
-  <img
-    src="https://hackernews-badge.vercel.app/api?id=40843683"
-    alt="Featured on Hacker News"
-    width="250"
-    height="55"
-  />
-</a>
-<a href="https://hellogithub.com/repository/57771fd91d1542c7a470959b677a9944" target="_blank">
-  <img
-    src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=57771fd91d1542c7a470959b677a9944&claim_uid=qi74Zp23wYKeAVB&theme=neutral"
-    alt="Featured｜HelloGitHub"
-    width="250"
-    height="55"
-  />
-</a>
-<a href="https://www.uneed.best/tool/sink" target="_blank">
-  <img
-    src="https://www.uneed.best/POTW1.png"
-    alt="Uneed Badge"
-    width="250"
-    height="55"
-  />
-</a>
-
-[<img src="https://devin.ai/assets/deepwiki-badge.png" alt="DeepWiki" height="20"/>](https://deepwiki.com/miantiao-me/Sink)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F69652?style=flat&logo=cloudflare&logoColor=white)
 ![Nuxt](https://img.shields.io/badge/Nuxt-00DC82?style=flat&logo=nuxtdotjs&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
 ![shadcn/ui](https://img.shields.io/badge/shadcn/ui-000000?style=flat&logo=shadcnui&logoColor=white)
 ![License](https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat)
 
-![Hero](./public/image.png)
+![ZheLink](./public/zhelink-banner.png)
 
 ---
 
@@ -64,30 +30,15 @@
 - **🌍 Multi-language:** Full i18n support for dashboard and redirect pages.
 
 > [!TIP]
-> **Who is Sink for?**
+> **Who is ZheLink for?**
 >
-> Sink focuses on **individuals and small teams** who want a simple, self-hosted shortener on Cloudflare.
->
-> For professional / business needs (managed service, multi-user, SLA, and more), use **[S.EE](https://sink.cool/see)**.
+> ZheLink focuses on **individuals and small teams** who want a simple, self-hosted shortener on Cloudflare.
 
-## 🪧 Demo
+## 🪧 Dashboard
 
-Experience the demo at [Sink.Cool](https://sink.cool/dashboard). Log in using the Site Token below:
+Open `/dashboard` on your deployed ZheLink instance and sign in using the `NUXT_SITE_TOKEN` configured for that instance.
 
-```txt
-Site Token: SinkCool
-```
-
-<details>
-  <summary><b>Screenshots</b></summary>
-  <img alt="Analytics" src="./docs/images/sink.cool_dashboard.png"/>
-  <img alt="Links" src="./docs/images/sink.cool_dashboard_links.png"/>
-  <img alt="Link Analytics" src="./docs/images/sink.cool_dashboard_link_slug.png"/>
-</details>
-
-## 🔀 Sibling versions
-
-Sink and [Slite](https://github.com/miantiao-me/Slite) are sibling versions of the same link-management and analytics project. Sink runs on Cloudflare's serverless platform, while Slite runs as a local Node.js 24+/Docker process. They keep features, API contracts, and file organization compatible with each other wherever practical. Neither version is a legacy branch, and Slite is not a fork replacement for Sink.
+See the [getting started guide](./docs/guide/getting-started.md) for setup instructions.
 
 ## 🧱 Technologies Used
 
@@ -101,50 +52,45 @@ Sink and [Slite](https://github.com/miantiao-me/Slite) are sibling versions of t
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **Deployment**: [Cloudflare](https://www.cloudflare.com/)
 
-## 🚗 Roadmap [WIP]
-
-We welcome your contributions and PRs.
-
-- [x] Browser Extension - [Sink Tool](https://github.com/zhuzhuyule/sink-extension)
-- [x] Chrome Extension - [Sink Quick Shorten](https://chromewebstore.google.com/detail/sink-quick-shorten/emlojomjpenjgkaphajcokijobpkejih)
-- [x] Raycast Extension - [Raycast-Sink](https://github.com/foru17/raycast-sink)
-- [x] Apple Shortcuts - [Sink Shortcuts](https://s.search1api.com/sink001)
-- [x] iOS App - [Sink](https://apps.apple.com/app/id6745417598)
-- [x] Enhanced Link Management (with Cloudflare D1)
-- [x] Analytics Enhancements (Multi-link filtering)
-- [x] Dashboard Performance Optimization (Infinite loading)
-- [x] API, migration, backup, and redirect tests
-
 ## 🏗️ Deployment
 
-> Video tutorial: [Watch here](https://www.youtube.com/watch?v=MkU23U2VE9E)
+ZheLink supports deployment to [Cloudflare Workers](./docs/deployment/workers.md) (recommended) and [Cloudflare Pages](./docs/deployment/pages.md) (deprecated).
 
-We currently support deployment to [Cloudflare Workers](https://docs.sink.cool/deployment/workers) (recommended) and [Cloudflare Pages](https://docs.sink.cool/deployment/pages) (deprecated).
+Local development requires Node.js 24 or newer and pnpm 11.11.0:
+
+```bash
+pnpm install
+pnpm dev
+```
+
+The development server runs at `http://localhost:7465`.
 
 ## ⚒️ Configuration
 
-[Configuration Docs](https://docs.sink.cool/configuration/)
+[Configuration Docs](./docs/configuration/index.md)
 
 ## 🔌 API
 
-[API Docs](https://docs.sink.cool/api/) · [Live Scalar Reference for the public demo instance](https://sink.cool/_docs/scalar)
+[API Docs](./docs/api/index.md)
+
+Open `/_docs/scalar` on your deployed ZheLink instance for the interactive API reference.
 
 ## 🤖 AI Skills
 
-Install Sink AI Skills for enhanced coding assistance:
+Install the repository's AI skills for ZheLink coding assistance by running this command from the repository root:
 
 ```bash
-npx skills add miantiao-me/sink
+npx skills add .
 ```
 
 ## 🧰 MCP
 
-Sink serves a built-in MCP endpoint at `POST /api/mcp`, using the official `@modelcontextprotocol/server` SDK v2, serving modern clients over the per-request transport and 2025-era clients over a stateless fallback with JSON responses.
+ZheLink serves a built-in MCP endpoint at `POST /api/mcp`, using the official `@modelcontextprotocol/server` SDK v2, serving modern clients over the per-request transport and 2025-era clients over a stateless fallback with JSON responses.
 
-> Replace the domain below with your own instance, and use the `NUXT_SITE_TOKEN` from your instance's environment variables as the bearer token.
+> Replace `https://zhelink.example` with your deployed ZheLink URL, and replace `YOUR_SITE_TOKEN` with the `NUXT_SITE_TOKEN` from your instance's environment variables.
 
 ```sh
-claude mcp add --transport http sink https://sink.cool/api/mcp --header "Authorization: Bearer SinkCool"
+claude mcp add --transport http zhelink https://zhelink.example/api/mcp --header "Authorization: Bearer YOUR_SITE_TOKEN"
 ```
 
 Any client that supports an HTTP transport with custom headers can connect the same way:
@@ -152,22 +98,22 @@ Any client that supports an HTTP transport with custom headers can connect the s
 ```json
 {
   "mcpServers": {
-    "sink": {
+    "zhelink": {
       "type": "http",
-      "url": "https://sink.cool/api/mcp",
+      "url": "https://zhelink.example/api/mcp",
       "headers": {
-        "Authorization": "Bearer SinkCool"
+        "Authorization": "Bearer YOUR_SITE_TOKEN"
       }
     }
   }
 }
 ```
 
-It exposes tools for managing links (list, search, read, count, tag, create, update, upsert, delete) and for reading analytics (counters, views over time, and top values per dimension). See the [integrations documentation](https://docs.sink.cool/integrations/) for the full list.
+It exposes tools for managing links (list, search, read, count, tag, create, update, upsert, delete) and for reading analytics (counters, views over time, and top values per dimension). See the [integrations documentation](./docs/integrations/index.md) for the full list.
 
 ## 🙋🏻 FAQs
 
-[FAQs](https://docs.sink.cool/faqs)
+[FAQs](./docs/faqs.md)
 
 ## 💖 Credits
 
@@ -179,8 +125,3 @@ It exposes tools for managing links (list, search, read, count, tag, create, upd
 ## 📄 License
 
 [AGPL-3.0-only](LICENSE) © [miantiao-me](https://github.com/miantiao-me)
-
-## ☕ Sponsor
-
-1. [Follow Me on X (Twitter)](https://404.li/x).
-2. [Become a sponsor on GitHub](https://github.com/sponsors/miantiao-me).
