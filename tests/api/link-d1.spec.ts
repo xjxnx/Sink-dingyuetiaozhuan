@@ -468,13 +468,13 @@ describe('d1 link integration', () => {
 
   it('preserves native KV expiration when migrating to D1', async () => {
     await clearLinkMigrationState()
-    const link = makeLink()
+    const link = makeLink(undefined, { showOnHomepage: false })
     const nativeExpiration = Math.floor(Date.now() / 1000) + 3600
     await putKvLink(link, { nativeExpiration })
 
     await runMigration(true)
 
-    expect(await getD1Link(link.slug)).toMatchObject({ effectiveExpiresAt: nativeExpiration })
+    expect(await getD1Link(link.slug)).toMatchObject({ effectiveExpiresAt: nativeExpiration, showOnHomepage: false })
   })
 
   it('replaces expired rows during import without overwriting active rows', async () => {

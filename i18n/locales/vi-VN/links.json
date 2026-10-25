@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "Hiện ở trang chủ",
+      "accessible_label": "Hiển thị {slug} trên trang chủ",
+      "save_failed": "Không thể lưu trạng thái hiển thị. Vui lòng thử lại."
+    },
     "migration_gate": {
       "loading": "Đang chuẩn bị liên kết",
       "scanned": "Đã quét {count} liên kết",

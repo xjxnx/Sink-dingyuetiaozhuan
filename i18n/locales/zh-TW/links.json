@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "前台顯示",
+      "accessible_label": "在前台顯示 {slug}",
+      "save_failed": "顯示狀態儲存失敗，請重試"
+    },
     "migration_gate": {
       "loading": "正在準備連結資料",
       "scanned": "已掃描 {count} 條連結",

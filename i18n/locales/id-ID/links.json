@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "Tampil di beranda",
+      "accessible_label": "Tampilkan {slug} di beranda",
+      "save_failed": "Gagal menyimpan visibilitas. Silakan coba lagi."
+    },
     "migration_gate": {
       "loading": "Menyiapkan tautan Anda",
       "scanned": "{count} tautan dipindai",

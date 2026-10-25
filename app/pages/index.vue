@@ -5,8 +5,7 @@
     "
   >
     <HomeHero />
-    <HomeLogos />
-    <HomeFeatures />
+    <HomeLinkDirectory />
     <HomeStats />
     <HomeCta />
   </div>

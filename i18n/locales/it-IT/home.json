@@ -75,6 +75,24 @@
     "testimonials": {
       "title": "Amato dagli Utenti",
       "subtitle": "Scopri cosa dicono gli sviluppatori su ZheLink"
+    },
+    "directory": {
+      "label": "Link diretti",
+      "title": "La tua destinazione, a un clic",
+      "subtitle": "I tuoi link abituali, da aprire e condividere con un clic.",
+      "open": "Visita",
+      "open_label": "Visita {name}",
+      "more": "Mostra altri link",
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "empty_title": "I link arriveranno presto",
+      "empty_description": "I nuovi link appariranno qui. Torna presto.",
+      "error_title": "Link non disponibili",
+      "error_description": "Riprova tra un momento.",
+      "copy_label": "Copia il link breve di {name}",
+      "copied": "Link breve copiato",
+      "copy_error": "Copia non riuscita. Riprova.",
+      "qr_label": "Mostra il codice QR di {name}"
     }
   }
 }

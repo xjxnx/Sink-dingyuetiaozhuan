@@ -75,6 +75,24 @@
     "testimonials": {
       "title": "Adorado pelos clientes",
       "subtitle": "Vê o que os programadores dizem sobre o ZheLink"
+    },
+    "directory": {
+      "label": "Ligações diretas",
+      "title": "O seu destino, à distância de um clique",
+      "subtitle": "As suas ligações habituais, para aceder e partilhar com um clique.",
+      "open": "Visitar",
+      "open_label": "Visitar {name}",
+      "more": "Mostrar mais ligações",
+      "loading": "A carregar",
+      "retry": "Tentar novamente",
+      "empty_title": "As ligações estão a chegar",
+      "empty_description": "As novas ligações vão aparecer aqui. Volte em breve.",
+      "error_title": "Ligações indisponíveis",
+      "error_description": "Tente novamente dentro de instantes.",
+      "copy_label": "Copiar a ligação curta de {name}",
+      "copied": "Ligação curta copiada",
+      "copy_error": "Não foi possível copiar. Tente novamente.",
+      "qr_label": "Mostrar o código QR de {name}"
     }
   }
 }

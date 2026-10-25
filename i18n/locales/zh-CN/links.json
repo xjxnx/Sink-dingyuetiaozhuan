@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "前台展示",
+      "accessible_label": "在前台展示 {slug}",
+      "save_failed": "展示状态保存失败，请重试"
+    },
     "migration_gate": {
       "loading": "正在准备链接数据",
       "scanned": "已扫描 {count} 条链接",

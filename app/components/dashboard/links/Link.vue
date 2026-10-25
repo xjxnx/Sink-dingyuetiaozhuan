@@ -3,8 +3,8 @@ import type { ComponentPublicInstance } from 'vue'
 import type { DashboardLink } from '@/types/dashboard-links'
 import { CalendarPlus2, Copy, CopyCheck, Ellipsis, Eraser, Flame, Hourglass, Link as LinkIcon, MousePointerClick, QrCode, ShieldAlert, SquarePen, Users } from '@lucide/vue'
 import { useClipboard, useMediaQuery } from '@vueuse/core'
-import { parseURL } from 'ufo'
 import { toast } from 'vue-sonner'
+import { getLinkIconUrl } from '#shared/utils/link-icon'
 
 const props = defineProps<{
   link: DashboardLink
@@ -72,13 +72,8 @@ const requestUrl = useRequestURL()
 const host = requestUrl.host
 const origin = requestUrl.origin
 
-function getLinkHost(url: string): string | undefined {
-  const { host } = parseURL(url)
-  return host
-}
-
 const shortLink = computed(() => `${origin}/${props.link.slug}`)
-const linkIcon = computed(() => `https://unavatar.webp.se/${getLinkHost(props.link.url)}?fallback=${encodeURIComponent(`${origin}/zhelink-icon-192.png`)}`)
+const linkIcon = computed(() => getLinkIconUrl(props.link.url, origin))
 const isExpired = computed(() => Boolean(props.link.expiration && props.link.expiration <= Math.floor(Date.now() / 1000)))
 const noteText = computed(() => props.link.comment?.trim() ?? '')
 const summaryText = computed(() => props.link.title?.trim() || props.link.description?.trim() || '')
@@ -333,8 +328,7 @@ function copyLink() {
           <span class="min-w-0 truncate">{{ link.url }}</span>
         </div>
         <div
-          v-if="tags.length || countersMap"
-          class="flex h-5 w-full min-w-0 items-center gap-2 text-sm"
+          class="flex w-full min-w-0 flex-wrap items-center gap-3 text-sm"
         >
           <div
             v-if="countersMap"
@@ -381,7 +375,7 @@ function copyLink() {
           </div>
           <div
             v-if="tags.length"
-            class="ml-auto flex min-w-0 flex-1 items-center justify-end gap-1"
+            class="flex min-w-0 flex-1 items-center gap-1"
           >
             <Badge
               v-for="tag in visibleTags"
@@ -399,6 +393,7 @@ function copyLink() {
               +{{ hiddenTagCount }}
             </Badge>
           </div>
+          <DashboardLinksVisibilitySwitch :link="link" />
         </div>
       </div>
     </CardContent>

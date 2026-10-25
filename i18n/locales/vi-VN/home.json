@@ -75,6 +75,24 @@
     "testimonials": {
       "title": "Người dùng yêu thích",
       "subtitle": "Xem các nhà phát triển nói gì về ZheLink"
+    },
+    "directory": {
+      "label": "Liên kết trực tiếp",
+      "title": "Điểm đến của bạn, chỉ một cú nhấp",
+      "subtitle": "Liên kết thường dùng, truy cập và chia sẻ chỉ với một lần nhấp.",
+      "open": "Truy cập",
+      "open_label": "Truy cập {name}",
+      "more": "Xem thêm liên kết",
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "empty_title": "Liên kết sắp ra mắt",
+      "empty_description": "Liên kết mới sẽ xuất hiện ở đây. Hãy quay lại sau.",
+      "error_title": "Không thể tải liên kết",
+      "error_description": "Vui lòng thử lại sau giây lát.",
+      "copy_label": "Sao chép liên kết ngắn của {name}",
+      "copied": "Đã sao chép liên kết ngắn",
+      "copy_error": "Không thể sao chép. Vui lòng thử lại.",
+      "qr_label": "Hiển thị mã QR của {name}"
     }
   }
 }

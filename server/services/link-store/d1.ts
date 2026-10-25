@@ -25,6 +25,7 @@ export interface ListLinksOptions {
   tag?: string
   status?: LinkStatus
   backfillExpiration?: boolean
+  showOnHomepage?: boolean
 }
 
 export interface ListLinksResult {
@@ -50,6 +51,7 @@ interface D1Cursor {
   createdAt?: number
   tag?: string
   status: LinkStatus
+  showOnHomepage?: boolean
 }
 
 function withoutQuery(url: string): string {
@@ -90,6 +92,7 @@ function rowToLink(row: LinkRow): Link {
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
     tags: [],
+    showOnHomepage: row.showOnHomepage,
   }
   const optionalFields = [
     'comment',
@@ -152,6 +155,7 @@ export function buildD1LinkValues(event: H3Event, link: Link, effectiveExpiresAt
     cloaking: link.cloaking ?? null,
     redirectWithQuery: link.redirectWithQuery ?? null,
     proxy: link.proxy ?? null,
+    showOnHomepage: link.showOnHomepage ?? true,
     password: link.password ?? null,
     unsafe: link.unsafe ?? null,
     geo: link.geo ?? null,
@@ -306,18 +310,30 @@ export async function d1DeleteLink(event: H3Event, slug: string): Promise<void> 
   ])
 }
 
+export async function d1SetLinkVisibility(event: H3Event, slug: string, id: string, showOnHomepage: boolean) {
+  const rows = await getDatabase(event).update(links).set({
+    showOnHomepage,
+    updatedAt: sql`max(${links.updatedAt} + 1, ${Math.floor(Date.now() / 1000)})`,
+  }).where(and(eq(links.slug, slug), eq(links.id, id))).returning()
+  const row = rows[0]
+  if (!row)
+    return null
+  const [link] = await rowsToLinks(event, [row])
+  return { link: link!, effectiveExpiresAt: row.effectiveExpiresAt }
+}
+
 function encodeCursor(cursor: D1Cursor): string {
   return `${D1_CURSOR_PREFIX}${btoa(JSON.stringify(cursor))}`
 }
 
-function decodeCursor(cursor: string | undefined, sort: LinkSortBy, tag: string | undefined, status: LinkStatus): D1Cursor | undefined {
+function decodeCursor(cursor: string | undefined, sort: LinkSortBy, tag: string | undefined, status: LinkStatus, showOnHomepage?: boolean): D1Cursor | undefined {
   if (!cursor)
     return undefined
   if (!cursor.startsWith(D1_CURSOR_PREFIX))
     throw createError({ status: 400, statusText: 'Invalid pagination cursor' })
   try {
     const decoded = JSON.parse(atob(cursor.slice(D1_CURSOR_PREFIX.length))) as D1Cursor
-    if (decoded.sort !== sort || decoded.tag !== tag || decoded.status !== status || typeof decoded.slug !== 'string')
+    if (decoded.sort !== sort || decoded.tag !== tag || decoded.status !== status || decoded.showOnHomepage !== showOnHomepage || typeof decoded.slug !== 'string')
       throw new Error('Cursor does not match sort')
     if ((sort === 'newest' || sort === 'oldest') && typeof decoded.createdAt !== 'number')
       throw new Error('Cursor is missing creation time')
@@ -332,7 +348,7 @@ export async function d1ListLinks(event: H3Event, options: ListLinksOptions): Pr
   const db = getDatabase(event)
   const sort = options.sort ?? 'newest'
   const status = options.status ?? 'active'
-  const cursor = decodeCursor(options.cursor, sort, options.tag, status)
+  const cursor = decodeCursor(options.cursor, sort, options.tag, status, options.showOnHomepage)
   let cursorCondition
   let order
 
@@ -354,7 +370,8 @@ export async function d1ListLinks(event: H3Event, options: ListLinksOptions): Pr
   }
 
   const tagCondition = exactTagCondition(db, options.tag)
-  const rows = await db.select().from(links).where(and(statusCondition(status), tagCondition, cursorCondition)).orderBy(...order).limit(options.limit + 1)
+  const visibilityCondition = options.showOnHomepage === undefined ? undefined : eq(links.showOnHomepage, options.showOnHomepage)
+  const rows = await db.select().from(links).where(and(statusCondition(status), tagCondition, visibilityCondition, cursorCondition)).orderBy(...order).limit(options.limit + 1)
   const hasMore = rows.length > options.limit
   const page = hasMore ? rows.slice(0, options.limit) : rows
   if (options.backfillExpiration) {
@@ -365,7 +382,7 @@ export async function d1ListLinks(event: H3Event, options: ListLinksOptions): Pr
   return {
     links: await rowsToLinks(event, page),
     list_complete: !hasMore,
-    cursor: hasMore && last ? encodeCursor({ sort, slug: last.slug, createdAt: last.createdAt, tag: options.tag, status }) : undefined,
+    cursor: hasMore && last ? encodeCursor({ sort, slug: last.slug, createdAt: last.createdAt, tag: options.tag, status, showOnHomepage: options.showOnHomepage }) : undefined,
   }
 }
 

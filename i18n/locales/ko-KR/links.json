@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "홈에 표시",
+      "accessible_label": "홈에 {slug} 표시",
+      "save_failed": "표시 설정을 저장하지 못했습니다. 다시 시도하세요."
+    },
     "migration_gate": {
       "loading": "링크 데이터 준비 중",
       "scanned": "링크 {count}개 스캔됨",

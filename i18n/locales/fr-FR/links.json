@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "Sur l’accueil",
+      "accessible_label": "Afficher {slug} sur l’accueil",
+      "save_failed": "Échec de l’enregistrement. Veuillez réessayer."
+    },
     "migration_gate": {
       "loading": "Préparation de vos liens",
       "scanned": "{count} liens analysés",

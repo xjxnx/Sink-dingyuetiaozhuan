@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "Mostra in home",
+      "accessible_label": "Mostra {slug} nella home",
+      "save_failed": "Impossibile salvare la visibilità. Riprova."
+    },
     "migration_gate": {
       "loading": "Preparazione dei link",
       "scanned": "{count} link analizzati",

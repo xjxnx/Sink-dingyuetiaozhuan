@@ -1,5 +1,10 @@
 {
   "links": {
+    "visibility": {
+      "label": "Auf Startseite",
+      "accessible_label": "{slug} auf der Startseite anzeigen",
+      "save_failed": "Sichtbarkeit konnte nicht gespeichert werden. Bitte erneut versuchen."
+    },
     "migration_gate": {
       "loading": "Links werden vorbereitet",
       "scanned": "{count} Links geprüft",

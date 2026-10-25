@@ -75,6 +75,24 @@
     "testimonials": {
       "title": "Disukai Pengguna",
       "subtitle": "Lihat apa kata developer tentang ZheLink"
+    },
+    "directory": {
+      "label": "Tautan langsung",
+      "title": "Tujuan Anda, cukup satu klik",
+      "subtitle": "Tautan sehari-hari, akses dan bagikan dengan sekali klik.",
+      "open": "Kunjungi",
+      "open_label": "Kunjungi {name}",
+      "more": "Tampilkan tautan lainnya",
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "empty_title": "Tautan segera hadir",
+      "empty_description": "Tautan baru akan muncul di sini. Kembali lagi nanti.",
+      "error_title": "Tautan tidak tersedia",
+      "error_description": "Silakan coba lagi sebentar lagi.",
+      "copy_label": "Salin tautan pendek untuk {name}",
+      "copied": "Tautan pendek disalin",
+      "copy_error": "Gagal menyalin. Silakan coba lagi.",
+      "qr_label": "Tampilkan kode QR untuk {name}"
     }
   }
 }

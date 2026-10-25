@@ -75,6 +75,24 @@
     "testimonials": {
       "title": "用户好评",
       "subtitle": "看看开发者们怎么说"
+    },
+    "directory": {
+      "label": "链接直达",
+      "title": "常用链接，一站直达",
+      "subtitle": "常用链接，一键访问与分享。",
+      "open": "前往",
+      "open_label": "前往{name}",
+      "more": "查看更多入口",
+      "loading": "正在加载",
+      "retry": "重新加载",
+      "empty_title": "链接即将上线",
+      "empty_description": "新的链接将在这里与你见面，稍后再来看看。",
+      "error_title": "暂时无法加载链接",
+      "error_description": "请稍后重试。",
+      "copy_label": "复制{name}的短链接",
+      "copied": "短链接已复制",
+      "copy_error": "复制失败，请重试。",
+      "qr_label": "查看{name}的二维码"
     }
   }
 }

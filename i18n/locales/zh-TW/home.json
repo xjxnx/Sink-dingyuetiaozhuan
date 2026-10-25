@@ -75,6 +75,24 @@
     "testimonials": {
       "title": "深受用戶喜愛",
       "subtitle": "看看開發者們都怎麼描述 ZheLink"
+    },
+    "directory": {
+      "label": "連結直達",
+      "title": "常用連結，一站直達",
+      "subtitle": "常用連結，一鍵存取與分享。",
+      "open": "前往",
+      "open_label": "前往{name}",
+      "more": "查看更多入口",
+      "loading": "正在載入",
+      "retry": "重新載入",
+      "empty_title": "連結即將上線",
+      "empty_description": "新的連結將在這裡與你見面，稍後再來看看。",
+      "error_title": "暫時無法載入連結",
+      "error_description": "請稍後重試。",
+      "copy_label": "複製{name}的短連結",
+      "copied": "短連結已複製",
+      "copy_error": "複製失敗，請重試。",
+      "qr_label": "查看{name}的 QR Code"
     }
   }
 }

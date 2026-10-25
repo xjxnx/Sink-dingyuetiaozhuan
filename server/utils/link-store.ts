@@ -17,6 +17,7 @@ import {
   d1ListLinks,
   d1ListTags,
   d1SearchLinks,
+  d1SetLinkVisibility,
   d1UpdateLink,
 } from '../services/link-store/d1'
 import { deleteLinkCache, isActiveLinkExpiration, putLinkCache, readLegacyKvLink } from '../services/link-store/kv'
@@ -143,6 +144,14 @@ export async function updateLink(event: H3Event, link: Link, expected?: Expected
 export async function deleteLink(event: H3Event, slug: string): Promise<void> {
   await d1DeleteLink(event, slug)
   await deleteLinkCache(event, slug)
+}
+
+export async function setLinkVisibility(event: H3Event, slug: string, id: string, showOnHomepage: boolean): Promise<Link> {
+  const result = await d1SetLinkVisibility(event, normalizeSlug(event, slug), id, showOnHomepage)
+  if (!result)
+    throw createError({ status: 404, statusText: 'Link not found or replaced' })
+  await writeThroughCache(event, result.link, result.effectiveExpiresAt)
+  return result.link
 }
 
 export async function listLinks(event: H3Event, options: ListLinksOptions): Promise<ListLinksResult> {
