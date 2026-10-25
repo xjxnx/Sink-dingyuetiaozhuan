@@ -6,7 +6,7 @@
   >
     <HomeHero />
     <HomeLinkDirectory />
-    <HomeStats />
+    <HomeLogos />
     <HomeCta />
   </div>
 </template>
