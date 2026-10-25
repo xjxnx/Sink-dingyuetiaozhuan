@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Sematkan",
+      "unpin": "Lepas sematan",
+      "pin_label": "Sematkan {slug} di beranda",
+      "unpin_label": "Lepas sematan {slug} dari beranda",
+      "save_failed": "Gagal menyimpan status sematan. Silakan coba lagi."
+    },
     "visibility": {
       "label": "Tampil di beranda",
       "accessible_label": "Tampilkan {slug} di beranda",

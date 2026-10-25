@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "置顶",
+      "unpin": "取消置顶",
+      "pin_label": "在前台置顶 {slug}",
+      "unpin_label": "取消 {slug} 的前台置顶",
+      "save_failed": "保存置顶状态失败，请重试。"
+    },
     "visibility": {
       "label": "前台展示",
       "accessible_label": "在前台展示 {slug}",

@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Fixar",
+      "unpin": "Desafixar",
+      "pin_label": "Fixar {slug} na página inicial",
+      "unpin_label": "Desafixar {slug} da página inicial",
+      "save_failed": "Não foi possível salvar o estado de fixação. Tente novamente."
+    },
     "visibility": {
       "label": "Mostrar no início",
       "accessible_label": "Mostrar {slug} na página inicial",

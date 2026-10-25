@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Anheften",
+      "unpin": "Loslösen",
+      "pin_label": "{slug} auf der Startseite anheften",
+      "unpin_label": "{slug} von der Startseite loslösen",
+      "save_failed": "Der Anheftstatus konnte nicht gespeichert werden. Bitte erneut versuchen."
+    },
     "visibility": {
       "label": "Auf Startseite",
       "accessible_label": "{slug} auf der Startseite anzeigen",

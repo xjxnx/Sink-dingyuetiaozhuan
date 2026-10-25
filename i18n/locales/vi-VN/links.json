@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Ghim",
+      "unpin": "Bỏ ghim",
+      "pin_label": "Ghim {slug} trên trang chủ",
+      "unpin_label": "Bỏ ghim {slug} khỏi trang chủ",
+      "save_failed": "Không thể lưu trạng thái ghim. Vui lòng thử lại."
+    },
     "visibility": {
       "label": "Hiện ở trang chủ",
       "accessible_label": "Hiển thị {slug} trên trang chủ",

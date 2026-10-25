@@ -234,6 +234,7 @@ describe('d1 link integration', () => {
     expect(await getStoredLink(link.slug)).toBeNull()
     expect((await fetchWithAuth(`/api/link/query?slug=${link.slug}`)).status).toBe(423)
     expect((await fetchWithAuth('/api/link/list')).status).toBe(423)
+    expect((await putJson('/api/link/pin', { slug: link.slug, id: link.id, pinned: true })).status).toBe(423)
     expect((await fetch(`/api/link/query?slug=${link.slug}`)).status).toBe(401)
 
     const status = await fetchWithAuth('/api/link/migration/status')
@@ -468,24 +469,24 @@ describe('d1 link integration', () => {
 
   it('preserves native KV expiration when migrating to D1', async () => {
     await clearLinkMigrationState()
-    const link = makeLink(undefined, { showOnHomepage: false })
+    const link = makeLink(undefined, { showOnHomepage: false, pinned: true })
     const nativeExpiration = Math.floor(Date.now() / 1000) + 3600
     await putKvLink(link, { nativeExpiration })
 
     await runMigration(true)
 
-    expect(await getD1Link(link.slug)).toMatchObject({ effectiveExpiresAt: nativeExpiration, showOnHomepage: false })
+    expect(await getD1Link(link.slug)).toMatchObject({ effectiveExpiresAt: nativeExpiration, showOnHomepage: false, pinned: true })
   })
 
   it('replaces expired rows during import without overwriting active rows', async () => {
     const now = Math.floor(Date.now() / 1000)
     const expired = makeLink()
     await insertD1Link(expired, now - 1)
-    const replacement = makeLink(expired.slug, { url: 'https://example.com/replacement' })
+    const replacement = makeLink(expired.slug, { url: 'https://example.com/replacement', pinned: true })
 
     const replacedResponse = await postJson('/api/link/import', { version: '1.0', links: [replacement] })
     expect(await replacedResponse.json()).toMatchObject({ success: 1, skipped: 0 })
-    expect(await getD1Link(expired.slug)).toMatchObject({ id: replacement.id, url: replacement.url })
+    expect(await getD1Link(expired.slug)).toMatchObject({ id: replacement.id, url: replacement.url, pinned: true })
 
     const active = makeLink()
     await insertD1Link(active)

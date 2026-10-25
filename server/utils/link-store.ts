@@ -17,6 +17,7 @@ import {
   d1ListLinks,
   d1ListTags,
   d1SearchLinks,
+  d1SetLinkPinned,
   d1SetLinkVisibility,
   d1UpdateLink,
 } from '../services/link-store/d1'
@@ -156,6 +157,14 @@ export async function setLinkVisibility(event: H3Event, slug: string, id: string
 
 export async function listLinks(event: H3Event, options: ListLinksOptions): Promise<ListLinksResult> {
   return await d1ListLinks(event, options)
+}
+
+export async function setLinkPinned(event: H3Event, slug: string, id: string, pinned: boolean): Promise<Link> {
+  const result = await d1SetLinkPinned(event, normalizeSlug(event, slug), id, pinned)
+  if (!result)
+    throw createError({ status: 404, statusText: 'Link not found or replaced' })
+  await writeThroughCache(event, result.link, result.effectiveExpiresAt)
+  return result.link
 }
 
 export function iterateAllAuthoritativeLinks(env: Cloudflare.Env): AsyncIterable<Link> {

@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Pin",
+      "unpin": "Unpin",
+      "pin_label": "Pin {slug} on homepage",
+      "unpin_label": "Unpin {slug} from homepage",
+      "save_failed": "Failed to save pin status. Please try again."
+    },
     "visibility": {
       "label": "Show on homepage",
       "accessible_label": "Show {slug} on homepage",

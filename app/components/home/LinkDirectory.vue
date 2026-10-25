@@ -58,7 +58,12 @@ async function loadMore() {
         </p>
       </header>
 
-      <div v-if="status === 'pending' && !data" class="space-y-3" role="status">
+      <div
+        v-if="status === 'pending' && !data" class="
+          grid grid-cols-1 gap-3
+          md:grid-cols-2
+        " role="status"
+      >
         <span class="sr-only">{{ $t('home.directory.loading') }}</span>
         <Item
           v-for="index in 4" :key="index" variant="outline" class="flex-nowrap" aria-hidden="true"
@@ -94,8 +99,13 @@ async function loadMore() {
       </Empty>
 
       <div v-else class="space-y-8">
-        <ul class="space-y-3">
-          <li v-for="link in data.links" :key="link.slug">
+        <ul
+          class="
+            grid grid-cols-1 gap-3
+            md:grid-cols-2
+          "
+        >
+          <li v-for="link in data.links" :key="link.slug" class="min-w-0">
             <HomeLinkRow :link="link" />
           </li>
         </ul>

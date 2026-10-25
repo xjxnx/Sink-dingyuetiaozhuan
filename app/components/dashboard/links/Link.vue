@@ -393,7 +393,10 @@ function copyLink() {
               +{{ hiddenTagCount }}
             </Badge>
           </div>
-          <DashboardLinksVisibilitySwitch :link="link" />
+          <div class="relative z-20 ml-auto flex shrink-0 items-center gap-2">
+            <DashboardLinksPinButton v-if="link.showOnHomepage !== false" :link="link" />
+            <DashboardLinksVisibilitySwitch :link="link" />
+          </div>
         </div>
       </div>
     </CardContent>

@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Épingler",
+      "unpin": "Désépingler",
+      "pin_label": "Épingler {slug} sur la page d’accueil",
+      "unpin_label": "Désépingler {slug} de la page d’accueil",
+      "save_failed": "Impossible d’enregistrer l’épinglage. Veuillez réessayer."
+    },
     "visibility": {
       "label": "Sur l’accueil",
       "accessible_label": "Afficher {slug} sur l’accueil",

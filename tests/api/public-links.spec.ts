@@ -19,6 +19,91 @@ afterEach(async () => {
 })
 
 describe('public homepage links', () => {
+  it('pins and unpins links without changing their other settings and keeps pins across edits', async () => {
+    const slug = uniqueSlug()
+    const expiration = Math.floor(Date.now() / 1000) + 3600
+    const response = await postJson('/api/link/create', {
+      slug,
+      url: 'https://example.com/pinned',
+      password: 'pin-password',
+      tags: ['kept'],
+      expiration,
+    })
+    const { link } = await response.json() as { link: { id: string } }
+    const before = await getD1Link(slug)
+    const pinned = await putJson('/api/link/pin', { slug, id: link.id, pinned: true })
+    expect(pinned.status).toBe(200)
+    const after = await getD1Link(slug)
+    expect(after).toEqual({ ...before, pinned: true, updatedAt: after!.updatedAt })
+    expect(after!.updatedAt).toBeGreaterThan(before!.updatedAt)
+    expect((await getStoredLink(slug))?.pinned).toBe(true)
+    expect(await pinned.text()).not.toContain(before!.password)
+
+    expect((await putJson('/api/link/edit', { slug, url: 'https://example.com/edited', tags: ['kept'], expiration })).status).toBe(201)
+    expect((await getD1Link(slug))?.pinned).toBe(true)
+    const listed = await (await fetchWithAuth('/api/link/list')).json() as { links: { slug: string, pinned: boolean }[] }
+    expect(listed.links.find(item => item.slug === slug)?.pinned).toBe(true)
+    const exported = await (await fetchWithAuth('/api/link/export')).json() as { links: { slug: string, pinned: boolean }[] }
+    expect(exported.links.find(item => item.slug === slug)?.pinned).toBe(true)
+
+    const unpinned = await putJson('/api/link/pin', { slug, id: link.id, pinned: false })
+    expect(unpinned.status).toBe(200)
+    expect((await getD1Link(slug))?.pinned).toBe(false)
+    expect((await getStoredLink(slug))?.pinned).toBe(false)
+  })
+
+  it('requires authentication, a boolean pin value, and the current link identity', async () => {
+    const slug = uniqueSlug()
+    const { link } = await (await postJson('/api/link/create', { slug, url: 'https://example.com' })).json() as { link: { id: string } }
+    const body = { slug, id: link.id, pinned: true }
+    expect((await putJson('/api/link/pin', body, false)).status).toBe(401)
+    expect((await putJson('/api/link/pin', { ...body, pinned: 'true' })).status).toBe(400)
+    expect((await putJson('/api/link/pin', { slug, id: link.id })).status).toBe(400)
+    expect((await putJson('/api/link/pin', { ...body, id: 'replaced' })).status).toBe(404)
+    expect((await putJson('/api/link/pin', { ...body, slug: uniqueSlug() })).status).toBe(404)
+    expect((await getD1Link(slug))?.pinned).toBe(false)
+  })
+
+  it('orders pinned links before pagination and excludes hidden and expired pins', async () => {
+    const now = Math.floor(Date.now() / 1000) + 1000
+    const slugs = Array.from({ length: 28 }, uniqueSlug)
+    const fixtures = slugs.map((slug, index) => ({
+      slug,
+      id: slug.slice(0, 26),
+      url: 'https://example.com',
+      normalizedUrl: 'https://example.com',
+      createdAt: now + Math.floor(index / 2),
+      updatedAt: now,
+      pinned: index < 14 || index >= 26,
+      showOnHomepage: index !== 26,
+      effectiveExpiresAt: index === 27 ? now - 2000 : null,
+    }))
+    for (let offset = 0; offset < fixtures.length; offset += 8)
+      await db.insert(links).values(fixtures.slice(offset, offset + 8))
+
+    const first = await (await fetch('/_public/links')).json() as PublicLinksResponse
+    expect(first.links).toHaveLength(12)
+    const seen = [...first.links]
+    let cursor = first.cursor
+    while (cursor) {
+      const response = await fetch(`/_public/links?cursor=${encodeURIComponent(cursor)}`)
+      expect(response.status).toBe(200)
+      const page = await response.json() as PublicLinksResponse
+      seen.push(...page.links)
+      cursor = page.cursor
+    }
+    const expected = fixtures.slice(0, 26).sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.createdAt - a.createdAt || a.slug.localeCompare(b.slug))
+    expect(seen.map(link => link.slug)).toEqual(expected.map(link => link.slug))
+
+    const dashboard = await (await fetchWithAuth('/api/link/list?limit=100')).json() as { links: { slug: string }[] }
+    expect(dashboard.links[0]?.slug).toBe(slugs[26])
+    expect((await fetchWithAuth(`/api/link/list?cursor=${encodeURIComponent(first.cursor!)}`)).status).toBe(400)
+    const decoded = JSON.parse(atob(first.cursor!.slice('d1:v1:'.length)))
+    delete decoded.pinned
+    const malformed = `d1:v1:${btoa(JSON.stringify(decoded))}`
+    expect((await fetch(`/_public/links?cursor=${encodeURIComponent(malformed)}`)).status).toBe(400)
+  })
+
   it('hides and restores a link without changing its redirect, password, tags, or expiration', async () => {
     const slug = uniqueSlug()
     const expiration = Math.floor(Date.now() / 1000) + 3600
@@ -156,14 +241,16 @@ describe('public homepage links', () => {
   it('paginates without duplicates and rejects malformed cursors', async () => {
     const now = Math.floor(Date.now() / 1000) + 100
     const slugs = Array.from({ length: 13 }, uniqueSlug)
-    await db.insert(links).values(slugs.map((slug, index) => ({
+    const fixtures = slugs.map((slug, index) => ({
       slug,
       id: slug.slice(0, 26),
       url: 'https://example.com',
       normalizedUrl: 'https://example.com',
       createdAt: now + index,
       updatedAt: now + index,
-    })))
+    }))
+    for (let offset = 0; offset < fixtures.length; offset += 10)
+      await db.insert(links).values(fixtures.slice(offset, offset + 10))
 
     const first = await (await fetch('/_public/links')).json() as PublicLinksResponse
     expect(first.links).toHaveLength(12)

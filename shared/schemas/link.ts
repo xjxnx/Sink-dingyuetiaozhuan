@@ -87,6 +87,7 @@ export const LinkFieldsSchema = z.object({
   redirectWithQuery: z.boolean().optional().describe('Append incoming query parameters to the destination URL.'),
   proxy: z.boolean().optional().describe('Reverse-proxy the destination instead of redirecting.'),
   showOnHomepage: z.boolean().optional().describe('Display the link in the public homepage directory. Defaults to true.'),
+  pinned: z.boolean().optional().describe('Prioritize the link in the public homepage directory. Defaults to false. Hidden and expired links remain excluded.'),
   password: LinkPasswordSchema.optional(),
   unsafe: z.boolean().optional().describe('Show a warning page before redirecting.'),
   geo: GeoSchema.optional().describe('Geo-routing rules mapping a two-letter country code to a URL.'),
@@ -165,6 +166,12 @@ export const LinkVisibilitySchema = z.object({
   slug: SlugSchema.min(1),
   id: IdSchema,
   showOnHomepage: z.boolean(),
+})
+
+export const LinkPinSchema = z.object({
+  slug: SlugSchema.min(1),
+  id: IdSchema,
+  pinned: z.boolean(),
 })
 
 export function parseLegacyKvLink(value: unknown, slug: string) {

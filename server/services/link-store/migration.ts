@@ -55,9 +55,9 @@ export async function insertMigratedKvLink(event: H3Event, link: Link, effective
     INSERT INTO links (
       slug, id, url, comment, created_at, updated_at, expiration, title,
       description, image, apple, google, cloaking, redirect_with_query,
-      proxy, password, unsafe, geo, normalized_url, effective_expires_at, show_on_homepage
+      proxy, password, unsafe, geo, normalized_url, effective_expires_at, show_on_homepage, pinned
     )
-    SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     WHERE NOT EXISTS (SELECT 1 FROM link_tombstones WHERE slug = ?)
     ON CONFLICT(slug) DO NOTHING
   `).bind(
@@ -82,6 +82,7 @@ export async function insertMigratedKvLink(event: H3Event, link: Link, effective
     values.normalizedUrl,
     values.effectiveExpiresAt,
     Number(values.showOnHomepage),
+    Number(values.pinned),
     values.slug,
   )
   // Each tag statement relies on the preceding SQLite changes() result to keep the tombstone-guarded link and tags atomic.

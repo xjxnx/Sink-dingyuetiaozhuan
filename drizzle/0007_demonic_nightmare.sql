@@ -1,0 +1,2 @@
+ALTER TABLE `links` ADD `pinned` integer DEFAULT false NOT NULL;--> statement-breakpoint
+CREATE INDEX `links_homepage_pinned_created_at_slug_idx` ON `links` (`show_on_homepage`,"pinned" desc,"created_at" desc,`slug`);

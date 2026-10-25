@@ -67,6 +67,7 @@ function mergeEditableLink(existingLink: Link, link: EditLink): Link {
     ...existingLink,
     ...linkWithoutPassword,
     showOnHomepage: link.showOnHomepage ?? existingLink.showOnHomepage ?? true,
+    pinned: link.pinned ?? existingLink.pinned ?? false,
     id: existingLink.id,
     createdAt: existingLink.createdAt,
     updatedAt: Math.max(Math.floor(Date.now() / 1000), existingLink.updatedAt + 1),

@@ -28,7 +28,12 @@ async function copyLink() {
 
 <template>
   <Item variant="outline" class="flex-nowrap">
-    <ItemMedia>
+    <ItemMedia
+      class="
+        group-has-data-[slot=item-description]/item:translate-y-0
+        group-has-data-[slot=item-description]/item:self-center
+      "
+    >
       <Avatar size="lg">
         <AvatarImage :src="linkIcon" alt="" loading="lazy" />
         <AvatarFallback>
@@ -36,7 +41,7 @@ async function copyLink() {
         </AvatarFallback>
       </Avatar>
     </ItemMedia>
-    <ItemContent class="min-w-0">
+    <ItemContent class="min-w-0 flex-row items-center gap-6">
       <h3 class="min-w-0">
         <Button as-child variant="link" class="max-w-full justify-start">
           <a :href="path" :title="displayName" :aria-label="$t('home.directory.open_label', { name: displayName })">
@@ -45,7 +50,7 @@ async function copyLink() {
         </Button>
       </h3>
       <ItemDescription
-        v-if="link.description" class="wrap-break-word whitespace-pre-line" :title="link.description"
+        v-if="link.description" class="max-w-2/5 shrink-0 truncate" :title="link.description"
       >
         {{ link.description }}
       </ItemDescription>

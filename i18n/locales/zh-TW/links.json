@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "置頂",
+      "unpin": "取消置頂",
+      "pin_label": "在首頁置頂 {slug}",
+      "unpin_label": "取消 {slug} 的首頁置頂",
+      "save_failed": "儲存置頂狀態失敗，請重試。"
+    },
     "visibility": {
       "label": "前台顯示",
       "accessible_label": "在前台顯示 {slug}",

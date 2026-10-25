@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "Fissa",
+      "unpin": "Rimuovi fissaggio",
+      "pin_label": "Fissa {slug} nella pagina iniziale",
+      "unpin_label": "Rimuovi {slug} dai link fissati nella pagina iniziale",
+      "save_failed": "Impossibile salvare lo stato del fissaggio. Riprova."
+    },
     "visibility": {
       "label": "Mostra in home",
       "accessible_label": "Mostra {slug} nella home",

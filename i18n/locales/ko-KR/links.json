@@ -1,5 +1,12 @@
 {
   "links": {
+    "pin": {
+      "pin": "고정",
+      "unpin": "고정 해제",
+      "pin_label": "홈페이지에 {slug} 고정",
+      "unpin_label": "홈페이지에서 {slug} 고정 해제",
+      "save_failed": "고정 상태를 저장하지 못했습니다. 다시 시도해 주세요."
+    },
     "visibility": {
       "label": "홈에 표시",
       "accessible_label": "홈에 {slug} 표시",
