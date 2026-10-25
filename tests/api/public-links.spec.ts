@@ -88,13 +88,13 @@ describe('public homepage links', () => {
       expect(dashboard.links.some(link => link.slug === slug)).toBe(true)
   })
 
-  it('publishes names and slugs without credentials or private link fields', async () => {
+  it('publishes names, public notes, and slugs without credentials or private link fields', async () => {
     const slug = uniqueSlug()
     const response = await postJson('/api/link/create', {
       slug,
       url: 'https://private.example.com/subscription?token=secret',
       title: 'My subscription',
-      description: 'Private destination description',
+      description: 'Public subscription note',
       comment: 'Internal note',
       password: 'private-password',
       apple: 'https://private.example.com/apple',
@@ -108,10 +108,10 @@ describe('public homepage links', () => {
     expect(directory.headers.get('Cache-Control')).toBe('no-store')
     const body = await directory.text()
     const data = JSON.parse(body) as PublicLinksResponse
-    expect(data.links.find(link => link.slug === slug)).toEqual({ slug, title: 'My subscription' })
+    expect(data.links.find(link => link.slug === slug)).toEqual({ slug, title: 'My subscription', description: 'Public subscription note' })
     for (const link of data.links)
-      expect(Object.keys(link).sort()).toEqual(['slug', 'title'])
-    for (const secret of ['private.example.com', 'secret', 'Internal note', 'private-password', 'internal-tag', 'Private destination description'])
+      expect(Object.keys(link).sort()).toEqual(['description', 'slug', 'title'])
+    for (const secret of ['private.example.com', 'secret', 'Internal note', 'private-password', 'internal-tag'])
       expect(body).not.toContain(secret)
 
     // Clicking the short link must still enforce its original password gate.
@@ -133,8 +133,24 @@ describe('public homepage links', () => {
     const response = await fetch('/_public/links?status=all&limit=1000')
     expect(response.status).toBe(200)
     const data = await response.json() as PublicLinksResponse
-    expect(data.links).toContainEqual({ slug: activeSlug, title: activeSlug })
+    expect(data.links).toContainEqual({ slug: activeSlug, title: activeSlug, description: '' })
     expect(data.links.some(link => link.slug === expiredSlug)).toBe(false)
+  })
+
+  it('reflects edited public notes and clears them without publishing internal comments', async () => {
+    const slug = uniqueSlug()
+    expect((await postJson('/api/link/create', {
+      slug,
+      url: 'https://example.com',
+      description: 'Original public note',
+      comment: 'Internal only',
+    })).status).toBe(201)
+
+    for (const description of ['Updated note\nSecond line', '']) {
+      expect((await putJson('/api/link/edit', { slug, url: 'https://example.com', description })).status).toBe(201)
+      const directory = await (await fetch('/_public/links')).json() as PublicLinksResponse
+      expect(directory.links.find(link => link.slug === slug)).toEqual({ slug, title: slug, description })
+    }
   })
 
   it('paginates without duplicates and rejects malformed cursors', async () => {

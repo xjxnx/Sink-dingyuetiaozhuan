@@ -7,6 +7,8 @@ export default withNuxt(antfu(
     formatters: true,
     pnpm: false,
     ignores: [
+      // Windows may check out this symlink as a plain file containing its target path.
+      'CLAUDE.md',
       'app/components/ui/**',
       'app/data/**',
       'public/*.json',

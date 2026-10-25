@@ -10,9 +10,13 @@ export default eventHandler(async (event): Promise<PublicLinksResponse> => {
   setResponseHeader(event, 'Cache-Control', 'no-store')
   setResponseHeader(event, 'X-Robots-Tag', 'noindex')
 
-  // Publish only display names and short-link slugs, never stored link records.
+  // Publish only display names, public notes, and slugs, never stored link records.
   return {
-    links: result.links.map(link => ({ slug: link.slug, title: link.title?.trim() || link.slug })),
+    links: result.links.map(link => ({
+      slug: link.slug,
+      title: link.title?.trim() || link.slug,
+      description: link.description?.trim() || '',
+    })),
     cursor: result.cursor,
     list_complete: result.list_complete,
   }

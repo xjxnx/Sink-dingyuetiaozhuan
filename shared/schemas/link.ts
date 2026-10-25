@@ -79,7 +79,7 @@ export const LinkFieldsSchema = z.object({
   comment: z.string().trim().max(2048).optional().describe('Optional internal note.'),
   expiration: ExpirationSchema.optional().describe('Unix seconds. Must be in the future.'),
   title: z.string().trim().max(256).optional().describe('Overrides the title in the link preview.'),
-  description: z.string().trim().max(2048).optional().describe('Overrides the description in the link preview.'),
+  description: z.string().trim().max(2048).optional().describe('Public note shown in the homepage directory and used as the link preview description.'),
   image: z.string().trim().max(128).optional().describe('Overrides the image in the link preview.'),
   apple: z.string().trim().url().max(MAX_URL_LENGTH).optional().describe('Apple App Store redirect URL.'),
   google: z.string().trim().url().max(MAX_URL_LENGTH).optional().describe('Google Play Store redirect URL.'),

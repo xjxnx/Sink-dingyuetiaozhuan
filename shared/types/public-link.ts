@@ -1,6 +1,7 @@
 export interface PublicLink {
   slug: string
   title: string
+  description: string
 }
 
 export interface PublicLinksResponse {

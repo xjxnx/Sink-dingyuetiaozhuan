@@ -44,6 +44,11 @@ async function copyLink() {
           </a>
         </Button>
       </h3>
+      <ItemDescription
+        v-if="link.description" class="wrap-break-word whitespace-pre-line" :title="link.description"
+      >
+        {{ link.description }}
+      </ItemDescription>
     </ItemContent>
     <ItemActions class="shrink-0 gap-0">
       <Button
