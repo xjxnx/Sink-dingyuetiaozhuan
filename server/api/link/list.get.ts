@@ -23,7 +23,7 @@ defineRouteMeta({
         name: 'sort',
         in: 'query',
         required: false,
-        schema: { type: 'string', enum: ['az', 'za', 'newest', 'oldest'], default: 'newest' },
+        schema: { type: 'string', enum: ['manual', 'az', 'za', 'newest', 'oldest'], default: 'newest' },
         description: 'Link sort order',
       },
       {
@@ -47,7 +47,7 @@ defineRouteMeta({
 export default eventHandler(async (event) => {
   const { limit, cursor, sort, tag, status } = await getValidatedQuery(event, ListLinksQuerySchema.parse)
 
-  const list = await listLinks(event, { limit, cursor, sort, tag, status })
+  const list = await listLinks(event, { limit, cursor, sort, tag, status, pinnedFirst: sort === 'manual' ? true : undefined })
   return {
     ...list,
     links: sanitizeLinksPassword(list.links),

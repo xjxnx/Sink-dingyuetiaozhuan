@@ -149,7 +149,7 @@ export const ExactUrlSearchSchema = SearchLinksQuerySchema
 export const ListLinksQuerySchema = z.object({
   limit: LinkQueryLimitSchema,
   cursor: z.string().trim().max(1024).optional().describe('Pagination cursor returned by a previous call.'),
-  sort: z.enum(['az', 'za', 'newest', 'oldest']).default('newest'),
+  sort: z.enum(['manual', 'az', 'za', 'newest', 'oldest']).default('newest'),
   tag: LinkTagFilterSchema.optional(),
   status: LinkStatusFilterSchema,
 })
@@ -157,6 +157,16 @@ export const ListLinksQuerySchema = z.object({
 export const LinkSlugQuerySchema = z.object({
   slug: z.string().trim().min(1).max(2048),
 })
+
+export const ReorderLinkSchema = z.object({
+  slug: SlugSchema.min(1),
+  id: IdSchema,
+  targetSlug: SlugSchema.min(1),
+  targetId: IdSchema,
+  placement: z.enum(['before', 'after']),
+})
+
+export type ReorderLink = z.infer<typeof ReorderLinkSchema>
 
 export const DeleteLinkSchema = z.object({
   slug: SlugSchema.min(1),

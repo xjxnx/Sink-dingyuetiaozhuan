@@ -31,5 +31,5 @@ export interface LinkListResponse {
   list_complete: boolean
 }
 
-export type LinkSortBy = 'newest' | 'oldest' | 'az' | 'za'
+export type LinkSortBy = 'manual' | 'newest' | 'oldest' | 'az' | 'za'
 export type LinkStatus = 'active' | 'expired' | 'all'

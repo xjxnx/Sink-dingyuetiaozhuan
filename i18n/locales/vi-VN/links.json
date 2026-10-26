@@ -153,12 +153,20 @@
       "newest": "Mới nhất trước",
       "oldest": "Cũ nhất trước",
       "az": "Slug A-Z",
-      "za": "Slug Z-A"
+      "za": "Slug Z-A",
+      "manual": "Thứ tự tùy chỉnh"
     },
     "update_failed": "Cập nhật liên kết thất bại",
     "create_failed": "Tạo liên kết thất bại",
     "ai_slug_failed": "Tạo slug AI thất bại",
     "ai_og_failed": "Không thể tạo AI OpenGraph",
-    "ai_og_success": "Tạo AI OpenGraph thành công"
+    "ai_og_success": "Tạo AI OpenGraph thành công",
+    "reorder": {
+      "hint": "Kéo tay cầm để sắp xếp. Thay đổi được đồng bộ với trang chủ; liên kết được ghim luôn ở đầu.",
+      "handle": "Sắp xếp {slug}: kéo hoặc dùng phím mũi tên",
+      "saved": "Đã lưu thứ tự và đồng bộ với trang chủ.",
+      "save_failed": "Không thể lưu thứ tự. Vui lòng thử lại.",
+      "pinned_group": "Liên kết được ghim luôn ở đầu. Hãy sắp xếp trong cùng nhóm hoặc đổi trạng thái ghim trước."
+    }
   }
 }

@@ -29,6 +29,10 @@ const linksStore = useDashboardLinksStore()
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
+      <DropdownMenuItem @click="linksStore.sortBy = 'manual'">
+        {{ $t('links.sort.manual') }}
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
       <DropdownMenuItem @click="linksStore.sortBy = 'newest'">
         {{ $t('links.sort.newest') }}
       </DropdownMenuItem>

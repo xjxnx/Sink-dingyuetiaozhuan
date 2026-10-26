@@ -20,6 +20,7 @@ export const links = sqliteTable('links', {
   proxy: integer({ mode: 'boolean' }),
   showOnHomepage: integer('show_on_homepage', { mode: 'boolean' }).notNull().default(true),
   pinned: integer({ mode: 'boolean' }).notNull().default(false),
+  sortOrder: integer('sort_order').notNull().default(0),
   password: text(),
   unsafe: integer({ mode: 'boolean' }),
   geo: text({ mode: 'json' }).$type<Link['geo']>(),
@@ -30,6 +31,8 @@ export const links = sqliteTable('links', {
   index('links_created_at_desc_slug_idx').on(sql`${table.createdAt} desc`, table.slug),
   index('links_normalized_url_idx').on(table.normalizedUrl),
   index('links_id_idx').on(table.id),
+  index('links_sort_order_created_at_slug_idx').on(table.sortOrder, sql`${table.createdAt} desc`, table.slug),
+  index('links_homepage_pinned_sort_order_idx').on(table.showOnHomepage, sql`${table.pinned} desc`, table.sortOrder, sql`${table.createdAt} desc`, table.slug),
   index('links_homepage_pinned_created_at_slug_idx').on(table.showOnHomepage, sql`${table.pinned} desc`, sql`${table.createdAt} desc`, table.slug),
 ])
 

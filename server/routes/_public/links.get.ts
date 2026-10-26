@@ -5,7 +5,7 @@ const querySchema = ListLinksQuerySchema.pick({ cursor: true })
 
 export default eventHandler(async (event): Promise<PublicLinksResponse> => {
   const { cursor } = await getValidatedQuery(event, querySchema.parse)
-  const result = await listLinks(event, { limit: 12, cursor, sort: 'newest', status: 'active', showOnHomepage: true, pinnedFirst: true })
+  const result = await listLinks(event, { limit: 12, cursor, sort: 'manual', status: 'active', showOnHomepage: true, pinnedFirst: true })
 
   setResponseHeader(event, 'Cache-Control', 'no-store')
   setResponseHeader(event, 'X-Robots-Tag', 'noindex')

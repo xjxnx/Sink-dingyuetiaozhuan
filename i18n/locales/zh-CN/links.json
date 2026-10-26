@@ -153,12 +153,20 @@
       "newest": "最新",
       "oldest": "最旧",
       "az": "短链(A-Z)",
-      "za": "短链(Z-A)"
+      "za": "短链(Z-A)",
+      "manual": "自定义排序"
     },
     "update_failed": "更新链接失败",
     "create_failed": "创建链接失败",
     "ai_slug_failed": "AI 生成短链失败",
     "ai_og_failed": "生成 AI OpenGraph 失败",
-    "ai_og_success": "成功生成 AI OpenGraph"
+    "ai_og_success": "成功生成 AI OpenGraph",
+    "reorder": {
+      "hint": "拖动卡片左侧手柄调整顺序，自动保存并同步到前台；置顶链接优先展示。",
+      "handle": "调整 {slug} 的顺序：拖动或使用方向键",
+      "saved": "排序已保存并同步到前台。",
+      "save_failed": "排序保存失败，请重试。",
+      "pinned_group": "置顶链接优先展示，请在同组内排序，或先调整置顶状态。"
+    }
   }
 }

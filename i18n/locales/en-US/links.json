@@ -153,12 +153,20 @@
       "newest": "Newest First",
       "oldest": "Oldest First",
       "az": "Slug A-Z",
-      "za": "Slug Z-A"
+      "za": "Slug Z-A",
+      "manual": "Custom order"
     },
     "update_failed": "Failed to update link",
     "create_failed": "Failed to create link",
     "ai_slug_failed": "Failed to generate AI slug",
     "ai_og_failed": "Failed to generate AI OpenGraph",
-    "ai_og_success": "AI OpenGraph generated successfully"
+    "ai_og_success": "AI OpenGraph generated successfully",
+    "reorder": {
+      "hint": "Drag the handles to reorder. Changes sync to the homepage; pinned links stay first.",
+      "handle": "Reorder {slug}: drag or use the arrow keys",
+      "saved": "Order saved and synced to the homepage.",
+      "save_failed": "Could not save the order. Please try again.",
+      "pinned_group": "Pinned links stay first. Reorder within the same group, or change the pin status first."
+    }
   }
 }

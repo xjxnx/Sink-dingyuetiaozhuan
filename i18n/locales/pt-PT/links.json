@@ -153,12 +153,20 @@
       "newest": "Mais recentes primeiro",
       "oldest": "Mais antigos primeiro",
       "az": "Slug A-Z",
-      "za": "Slug Z-A"
+      "za": "Slug Z-A",
+      "manual": "Ordem personalizada"
     },
     "update_failed": "Falha ao atualizar link",
     "create_failed": "Falha ao criar link",
     "ai_slug_failed": "Falha ao gerar slug via IA",
     "ai_og_failed": "Falha ao gerar OpenGraph da IA",
-    "ai_og_success": "OpenGraph da IA gerado com sucesso"
+    "ai_og_success": "OpenGraph da IA gerado com sucesso",
+    "reorder": {
+      "hint": "Arraste as pegas para reordenar. As alterações são sincronizadas com a página inicial; as ligações afixadas ficam primeiro.",
+      "handle": "Reordenar {slug}: arraste ou use as teclas de seta",
+      "saved": "Ordem guardada e sincronizada com a página inicial.",
+      "save_failed": "Não foi possível guardar a ordem. Tente novamente.",
+      "pinned_group": "As ligações afixadas ficam primeiro. Reordene no mesmo grupo ou altere primeiro a afixação."
+    }
   }
 }

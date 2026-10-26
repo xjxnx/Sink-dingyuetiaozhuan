@@ -153,12 +153,20 @@
       "newest": "Terbaru",
       "oldest": "Terlama",
       "az": "Slug A-Z",
-      "za": "Slug Z-A"
+      "za": "Slug Z-A",
+      "manual": "Urutan kustom"
     },
     "update_failed": "Gagal memperbarui tautan",
     "create_failed": "Gagal membuat tautan",
     "ai_slug_failed": "Gagal membuat slug AI",
     "ai_og_failed": "Gagal membuat OpenGraph AI",
-    "ai_og_success": "OpenGraph AI berhasil dibuat"
+    "ai_og_success": "OpenGraph AI berhasil dibuat",
+    "reorder": {
+      "hint": "Seret pegangan untuk mengurutkan. Perubahan disinkronkan ke beranda; tautan yang disematkan tetap di atas.",
+      "handle": "Urutkan {slug}: seret atau gunakan tombol panah",
+      "saved": "Urutan disimpan dan disinkronkan ke beranda.",
+      "save_failed": "Gagal menyimpan urutan. Silakan coba lagi.",
+      "pinned_group": "Tautan yang disematkan tetap di atas. Urutkan dalam grup yang sama atau ubah status sematan terlebih dahulu."
+    }
   }
 }

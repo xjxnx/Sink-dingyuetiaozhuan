@@ -153,12 +153,20 @@
       "newest": "최신순",
       "oldest": "오래된순",
       "az": "슬러그 A-Z",
-      "za": "슬러그 Z-A"
+      "za": "슬러그 Z-A",
+      "manual": "사용자 지정 순서"
     },
     "update_failed": "링크 업데이트에 실패했습니다",
     "create_failed": "링크 생성에 실패했습니다",
     "ai_slug_failed": "AI 슬러그 생성에 실패했습니다",
     "ai_og_failed": "AI OpenGraph 생성에 실패했습니다",
-    "ai_og_success": "AI OpenGraph가 성공적으로 생성되었습니다"
+    "ai_og_success": "AI OpenGraph가 성공적으로 생성되었습니다",
+    "reorder": {
+      "hint": "핸들을 드래그하여 순서를 변경하세요. 변경 사항은 홈페이지에 동기화되며 고정된 링크가 먼저 표시됩니다.",
+      "handle": "{slug} 순서 변경: 드래그하거나 방향키 사용",
+      "saved": "순서가 저장되고 홈페이지에 동기화되었습니다.",
+      "save_failed": "순서를 저장하지 못했습니다. 다시 시도하세요.",
+      "pinned_group": "고정된 링크가 먼저 표시됩니다. 같은 그룹 안에서 순서를 바꾸거나 먼저 고정을 변경하세요."
+    }
   }
 }

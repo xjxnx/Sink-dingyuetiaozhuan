@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { LinkUpdateType } from '@/types'
 import type { DashboardLink, DashboardLinkListResponse } from '@/types/dashboard-links'
-import { AlertCircle, Inbox, LoaderCircle } from '@lucide/vue'
+import { AlertCircle, GripVertical, Inbox, LoaderCircle } from '@lucide/vue'
 import { useInfiniteScroll } from '@vueuse/core'
+import { toast } from 'vue-sonner'
 
 const linksStore = useDashboardLinksStore()
+const { t } = useI18n()
+const { previewMode } = useRuntimeConfig().public
 
 const links = ref<DashboardLink[]>([])
 const listComplete = ref(false)
@@ -13,6 +16,13 @@ const listLoading = ref(false)
 const limit = 24
 let cursor = ''
 let requestGeneration = 0
+let nextPageLimit = limit
+let replaceOnLoad = false
+const savingOrder = ref(false)
+const draggedSlug = ref<string>()
+const dropTargetSlug = ref<string>()
+const isManualOrder = computed(() => linksStore.sortBy === 'manual')
+const canReorder = computed(() => isManualOrder.value && !previewMode && !savingOrder.value && !listLoading.value)
 
 const { countersMap, counterErrorIds, fetchCounters, resetCounters } = useLinkCounters()
 provide(LINKS_COUNTERS_MAP_KEY, countersMap)
@@ -27,16 +37,17 @@ onMounted(() => {
 })
 
 async function getLinks() {
-  if (listLoading.value || listComplete.value)
+  if (listLoading.value || listComplete.value || savingOrder.value)
     return
 
   const generation = requestGeneration
   const requestCursor = cursor
+  const replace = replaceOnLoad
   listLoading.value = true
   try {
     const data = await useAPI<DashboardLinkListResponse>('/api/link/list', {
       query: {
-        limit,
+        limit: nextPageLimit,
         cursor: requestCursor,
         sort: linksStore.sortBy,
         status: linksStore.status,
@@ -49,7 +60,9 @@ async function getLinks() {
 
     const newLinks = data.links.filter(Boolean)
     const existingSlugs = new Set(links.value.map(link => link.slug))
-    links.value = links.value.concat(newLinks.filter(link => !existingSlugs.has(link.slug)))
+    links.value = replace ? newLinks : links.value.concat(newLinks.filter(link => !existingSlugs.has(link.slug)))
+    replaceOnLoad = false
+    nextPageLimit = limit
     cursor = data.cursor
     listComplete.value = data.list_complete
     listError.value = false
@@ -69,15 +82,124 @@ async function getLinks() {
   }
 }
 
-function resetAndLoad() {
+async function resetAndLoad(keepVisible = false) {
+  endDrag()
   requestGeneration++
-  links.value = []
-  resetCounters()
+  nextPageLimit = keepVisible ? Math.min(1000, Math.max(limit, links.value.length)) : limit
+  replaceOnLoad = keepVisible
+  if (!keepVisible) {
+    links.value = []
+    resetCounters()
+  }
   cursor = ''
   listComplete.value = false
   listError.value = false
   listLoading.value = false
-  void getLinks()
+  await getLinks()
+}
+
+function endDrag() {
+  draggedSlug.value = undefined
+  dropTargetSlug.value = undefined
+}
+
+function startDrag(event: DragEvent, link: DashboardLink) {
+  if (!canReorder.value || !event.dataTransfer) {
+    event.preventDefault()
+    return
+  }
+  draggedSlug.value = link.slug
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.setData('text/plain', link.slug)
+  const card = (event.currentTarget as HTMLElement).closest('[data-reorder-card]')
+  if (card instanceof HTMLElement)
+    event.dataTransfer.setDragImage(card, 24, 24)
+}
+
+function dragOver(event: DragEvent, link: DashboardLink) {
+  if (!canReorder.value || !draggedSlug.value || draggedSlug.value === link.slug)
+    return
+  event.preventDefault()
+  if (event.dataTransfer)
+    event.dataTransfer.dropEffect = 'move'
+  dropTargetSlug.value = link.slug
+}
+
+function dragLeave(event: DragEvent, link: DashboardLink) {
+  if (event.relatedTarget instanceof Node && (event.currentTarget as HTMLElement).contains(event.relatedTarget))
+    return
+  if (dropTargetSlug.value === link.slug)
+    dropTargetSlug.value = undefined
+}
+
+function dropLink(event: DragEvent, target: DashboardLink) {
+  if (!draggedSlug.value)
+    return
+  event.preventDefault()
+  const source = links.value.find(link => link.slug === draggedSlug.value)
+  endDrag()
+  if (source)
+    void moveLink(source, target)
+}
+
+async function moveLink(source: DashboardLink, target: DashboardLink) {
+  if (!canReorder.value || source.slug === target.slug)
+    return
+  if (Boolean(source.pinned) !== Boolean(target.pinned)) {
+    toast(t('links.reorder.pinned_group'))
+    return
+  }
+
+  const sourceIndex = links.value.findIndex(link => link.slug === source.slug)
+  const targetIndex = links.value.findIndex(link => link.slug === target.slug)
+  if (sourceIndex < 0 || targetIndex < 0)
+    return
+
+  savingOrder.value = true
+  const generation = requestGeneration
+  const originalOrder = new Map(links.value.map((link, index) => [link.slug, index]))
+  links.value.splice(sourceIndex, 1)
+  links.value.splice(targetIndex, 0, source)
+  try {
+    await useAPI('/api/link/reorder', {
+      method: 'PUT',
+      body: {
+        slug: source.slug,
+        id: source.id,
+        targetSlug: target.slug,
+        targetId: target.id,
+        placement: sourceIndex < targetIndex ? 'after' : 'before',
+      },
+    })
+    toast(t('links.reorder.saved'))
+    void refreshNuxtData('home-link-directory')
+  }
+  catch (error) {
+    if (generation === requestGeneration)
+      links.value.sort((a, b) => (originalOrder.get(a.slug) ?? Infinity) - (originalOrder.get(b.slug) ?? Infinity))
+    console.error(error)
+    toast.error(t('links.reorder.save_failed'))
+  }
+  finally {
+    savingOrder.value = false
+    // Reordering invalidates the old pagination boundary; reload before appending.
+    await resetAndLoad(generation === requestGeneration)
+    await nextTick()
+    document.getElementById(`link-reorder-${source.slug}`)?.focus({ preventScroll: true })
+  }
+}
+
+function reorderWithKeyboard(event: KeyboardEvent, link: DashboardLink) {
+  const direction = ['ArrowLeft', 'ArrowUp'].includes(event.key)
+    ? -1
+    : ['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : 0
+  if (!direction)
+    return
+  event.preventDefault()
+  const index = links.value.findIndex(item => item.slug === link.slug)
+  const target = links.value[index + direction]
+  if (target)
+    void moveLink(link, target)
 }
 
 useInfiniteScroll(
@@ -94,7 +216,7 @@ useInfiniteScroll(
 
 watch(
   [() => linksStore.sortBy, () => linksStore.status, () => linksStore.tag],
-  resetAndLoad,
+  () => void resetAndLoad(),
 )
 
 function matchesCurrentFilters(link: DashboardLink) {
@@ -106,6 +228,10 @@ function matchesCurrentFilters(link: DashboardLink) {
 function updateLinkList(link: DashboardLink, type: LinkUpdateType) {
   if (type === 'edit') {
     const index = links.value.findIndex(l => l.slug === link.slug)
+    if (isManualOrder.value && index >= 0 && Boolean(links.value[index]?.pinned) !== Boolean(link.pinned)) {
+      void resetAndLoad()
+      return
+    }
     if (index >= 0 && matchesCurrentFilters(link))
       links.value[index] = link
     else if (index >= 0)
@@ -119,6 +245,11 @@ function updateLinkList(link: DashboardLink, type: LinkUpdateType) {
   else {
     if (!matchesCurrentFilters(link))
       return
+
+    if (isManualOrder.value) {
+      void resetAndLoad()
+      return
+    }
 
     if (linksStore.sortBy !== 'newest') {
       linksStore.sortBy = 'newest'
@@ -135,6 +266,13 @@ linksStore.onLinkUpdate(({ link, type }) => {
 </script>
 
 <template>
+  <p
+    v-if="isManualOrder && links.length && !previewMode" class="
+      text-sm text-muted-foreground
+    "
+  >
+    {{ $t('links.reorder.hint') }}
+  </p>
   <section
     v-if="links.length"
     class="
@@ -143,11 +281,40 @@ linksStore.onLinkUpdate(({ link, type }) => {
       lg:grid-cols-3
     "
   >
-    <DashboardLinksLink
+    <div
       v-for="link in links"
       :key="link.slug"
-      :link="link"
-    />
+      data-reorder-card
+      class="min-w-0 rounded-2xl"
+      :class="{ 'opacity-50': draggedSlug === link.slug, 'ring-2 ring-ring': dropTargetSlug === link.slug }"
+      @dragover="dragOver($event, link)"
+      @dragleave="dragLeave($event, link)"
+      @drop="dropLink($event, link)"
+    >
+      <DashboardLinksLink :link="link">
+        <template v-if="isManualOrder && !previewMode" #reorder-handle>
+          <Button
+            :id="`link-reorder-${link.slug}`"
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            class="
+              relative z-20 shrink-0 cursor-grab
+              active:cursor-grabbing
+            "
+            :draggable="canReorder"
+            :disabled="!canReorder"
+            :aria-label="$t('links.reorder.handle', { slug: link.slug })"
+            :title="$t('links.reorder.handle', { slug: link.slug })"
+            @dragstart="startDrag($event, link)"
+            @dragend="endDrag"
+            @keydown="reorderWithKeyboard($event, link)"
+          >
+            <GripVertical aria-hidden="true" />
+          </Button>
+        </template>
+      </DashboardLinksLink>
+    </div>
   </section>
   <section
     v-else-if="listLoading"

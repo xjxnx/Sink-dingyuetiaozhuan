@@ -1,6 +1,6 @@
 import type { BatchItem } from 'drizzle-orm/batch'
 import type { H3Event } from 'h3'
-import type { Link } from '#shared/schemas/link'
+import type { Link, ReorderLink } from '#shared/schemas/link'
 import type { LinkSearchItem, LinkSortBy, LinkStatus } from '#shared/types/link'
 import { and, asc, count, desc, eq, exists, gt, inArray, isNotNull, isNull, lt, lte, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
@@ -50,6 +50,7 @@ interface D1Cursor {
   sort: LinkSortBy
   slug: string
   createdAt?: number
+  sortOrder?: number
   tag?: string
   status: LinkStatus
   showOnHomepage?: boolean
@@ -315,6 +316,41 @@ export async function d1DeleteLink(event: H3Event, slug: string): Promise<void> 
   ])
 }
 
+export async function d1ReorderLink(event: H3Event, input: ReorderLink): Promise<boolean> {
+  // Materialized snapshots keep ranks and both identities stable while SQLite
+  // updates the same table. Drizzle does not expose MATERIALIZED CTEs directly.
+  // Rank the complete store so filtered or unloaded links keep their relative order.
+  const moved = await getDatabase(event).all<{ slug: string }>(sql`
+    WITH ranked AS MATERIALIZED (
+      SELECT slug, id, row_number() OVER (
+        ORDER BY sort_order ASC, created_at DESC, slug ASC
+      ) AS position FROM links
+    ), move AS MATERIALIZED (
+      SELECT source.slug, source.position AS origin,
+        CASE WHEN source.slug = target.slug THEN source.position ELSE
+          target.position + ${input.placement === 'after' ? 1 : 0}
+          - CASE WHEN source.position < target.position THEN 1 ELSE 0 END
+        END AS destination
+      FROM ranked AS source, ranked AS target
+      WHERE source.slug = ${input.slug} AND source.id = ${input.id}
+        AND target.slug = ${input.targetSlug} AND target.id = ${input.targetId}
+    ), reordered AS MATERIALIZED (
+      SELECT ranked.slug, CASE
+        WHEN ranked.slug = move.slug THEN move.destination
+        WHEN ranked.position > move.origin AND ranked.position <= move.destination THEN ranked.position - 1
+        WHEN ranked.position < move.origin AND ranked.position >= move.destination THEN ranked.position + 1
+        ELSE ranked.position END AS position
+      FROM ranked, move
+    )
+    UPDATE links SET sort_order = (SELECT position FROM reordered WHERE reordered.slug = links.slug)
+    WHERE EXISTS (SELECT 1 FROM move)
+      AND (slug = ${input.slug} OR sort_order != (SELECT position FROM reordered WHERE reordered.slug = links.slug))
+    RETURNING slug
+  `)
+  // Order is directory metadata, excluded from redirect caches and link versions.
+  return moved.length > 0
+}
+
 export async function d1SetLinkVisibility(event: H3Event, slug: string, id: string, showOnHomepage: boolean) {
   const rows = await getDatabase(event).update(links).set({
     showOnHomepage,
@@ -354,6 +390,8 @@ function decodeCursor(cursor: string | undefined, sort: LinkSortBy, tag: string 
       throw new Error('Cursor does not match sort')
     if ((sort === 'newest' || sort === 'oldest') && typeof decoded.createdAt !== 'number')
       throw new Error('Cursor is missing creation time')
+    if (sort === 'manual' && (!Number.isSafeInteger(decoded.sortOrder) || !Number.isSafeInteger(decoded.createdAt)))
+      throw new Error('Cursor is missing custom order')
     if (decoded.pinnedFirst !== pinnedFirst || (pinnedFirst && typeof decoded.pinned !== 'boolean'))
       throw new Error('Cursor does not match pin ordering')
     return decoded
@@ -371,7 +409,17 @@ export async function d1ListLinks(event: H3Event, options: ListLinksOptions): Pr
   let cursorCondition
   let order
 
-  if (sort === 'az') {
+  if (sort === 'manual') {
+    cursorCondition = cursor
+      ? or(
+          gt(links.sortOrder, cursor.sortOrder!),
+          and(eq(links.sortOrder, cursor.sortOrder!), lt(links.createdAt, cursor.createdAt!)),
+          and(eq(links.sortOrder, cursor.sortOrder!), eq(links.createdAt, cursor.createdAt!), gt(links.slug, cursor.slug)),
+        )
+      : undefined
+    order = [asc(links.sortOrder), desc(links.createdAt), asc(links.slug)]
+  }
+  else if (sort === 'az') {
     cursorCondition = cursor ? gt(links.slug, cursor.slug) : undefined
     order = [asc(links.slug)]
   }
@@ -411,7 +459,7 @@ export async function d1ListLinks(event: H3Event, options: ListLinksOptions): Pr
   return {
     links: await rowsToLinks(event, page),
     list_complete: !hasMore,
-    cursor: hasMore && last ? encodeCursor({ sort, slug: last.slug, createdAt: last.createdAt, tag: options.tag, status, showOnHomepage: options.showOnHomepage, pinnedFirst: options.pinnedFirst, pinned: options.pinnedFirst ? last.pinned : undefined }) : undefined,
+    cursor: hasMore && last ? encodeCursor({ sort, slug: last.slug, createdAt: last.createdAt, sortOrder: sort === 'manual' ? last.sortOrder : undefined, tag: options.tag, status, showOnHomepage: options.showOnHomepage, pinnedFirst: options.pinnedFirst, pinned: options.pinnedFirst ? last.pinned : undefined }) : undefined,
   }
 }
 

@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import type { Link } from '#shared/schemas/link'
+import type { Link, ReorderLink } from '#shared/schemas/link'
 import type { LinkSearchItem } from '#shared/types/link'
 import type { ExpectedLinkVersion, LinkFilterOptions, ListLinksOptions, ListLinksResult, SearchLinksOptions } from '../services/link-store/d1'
 import { getRequestHost, getRequestProtocol } from 'h3'
@@ -16,6 +16,7 @@ import {
   d1IterateAllLinks,
   d1ListLinks,
   d1ListTags,
+  d1ReorderLink,
   d1SearchLinks,
   d1SetLinkPinned,
   d1SetLinkVisibility,
@@ -157,6 +158,16 @@ export async function setLinkVisibility(event: H3Event, slug: string, id: string
 
 export async function listLinks(event: H3Event, options: ListLinksOptions): Promise<ListLinksResult> {
   return await d1ListLinks(event, options)
+}
+
+export async function reorderLink(event: H3Event, input: ReorderLink): Promise<void> {
+  const reordered = await d1ReorderLink(event, {
+    ...input,
+    slug: normalizeSlug(event, input.slug),
+    targetSlug: normalizeSlug(event, input.targetSlug),
+  })
+  if (!reordered)
+    throw createError({ status: 404, statusText: 'Link not found or replaced' })
 }
 
 export async function setLinkPinned(event: H3Event, slug: string, id: string, pinned: boolean): Promise<Link> {

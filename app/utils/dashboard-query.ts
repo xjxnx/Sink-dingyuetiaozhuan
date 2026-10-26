@@ -23,7 +23,7 @@ export const REALTIME_WINDOWS = [
   'last-24h',
 ] as const
 
-export const LINK_SORTS = ['newest', 'oldest', 'az', 'za'] as const
+export const LINK_SORTS = ['manual', 'newest', 'oldest', 'az', 'za'] as const
 export const LINK_STATUSES = ['active', 'expired'] as const
 export const ANALYSIS_VIEWS = ['trend', 'heatmap'] as const
 export const HEATMAP_METRICS = ['visits', 'visitors'] as const
@@ -67,7 +67,7 @@ export function toSlugFilters(value: string | string[]): DashboardSlugFilters {
 const DEFAULT_ANALYSIS_PRESET: AnalysisDatePreset = 'last-7d'
 const DEFAULT_REALTIME_WINDOW: RealtimeWindow = 'last-1h'
 const DEFAULT_LINK_STATUS: DashboardLinkStatusQuery = 'active'
-const DEFAULT_LINK_SORT: DashboardLinkSort = 'newest'
+const DEFAULT_LINK_SORT: DashboardLinkSort = 'manual'
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i
 
 function firstQueryValue(value: DashboardQueryValue): string | undefined {

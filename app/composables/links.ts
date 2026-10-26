@@ -11,7 +11,7 @@ export interface LinkUpdateEvent {
 }
 
 export const useDashboardLinksStore = defineStore('dashboard-links', () => {
-  const sortBy = ref<DashboardLinkSort>('newest')
+  const sortBy = ref<DashboardLinkSort>('manual')
   const status = ref<DashboardLinkStatus>('active')
   const tag = ref<string>()
 

@@ -97,6 +97,7 @@ function copyLink() {
       <div
         class="flex min-w-0 items-start gap-2"
       >
+        <slot name="reorder-handle" />
         <div
           class="group flex min-w-0 flex-1 cursor-pointer items-center gap-3"
         >

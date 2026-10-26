@@ -154,10 +154,11 @@ describe('links dashboard query', () => {
   it('normalizes invalid values and omits defaults', () => {
     expect(parseLinksQuery({ status: 'disabled', sort: 'popular', tag: '   ' })).toEqual({
       status: 'active',
-      sort: 'newest',
+      sort: 'manual',
       tag: undefined,
     })
-    expect(serializeLinksQuery({ status: 'active', sort: 'newest' })).toEqual({})
+    expect(serializeLinksQuery({ status: 'active', sort: 'manual' })).toEqual({})
+    expect(serializeLinksQuery({ status: 'active', sort: 'newest' })).toEqual({ sort: 'newest' })
   })
 
   it('normalizes and serializes non-default values', () => {

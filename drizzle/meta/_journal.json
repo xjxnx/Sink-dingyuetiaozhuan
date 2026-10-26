@@ -57,6 +57,13 @@
       "when": 1792916060090,
       "tag": "0007_demonic_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1793012319950,
+      "tag": "0008_lyrical_kylun",
+      "breakpoints": true
     }
   ]
 }
