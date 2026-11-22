@@ -105,7 +105,11 @@ async function loadMore() {
             md:grid-cols-2
           "
         >
-          <li v-for="link in data.links" :key="link.slug" class="min-w-0">
+          <li
+            v-for="link in data.links" :key="link.slug" class="
+              @container/link-row min-w-0
+            "
+          >
             <HomeLinkRow :link="link" />
           </li>
         </ul>

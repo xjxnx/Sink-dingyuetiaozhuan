@@ -27,13 +27,8 @@ async function copyLink() {
 </script>
 
 <template>
-  <Item variant="outline" class="flex-nowrap">
-    <ItemMedia
-      class="
-        group-has-data-[slot=item-description]/item:translate-y-0
-        group-has-data-[slot=item-description]/item:self-center
-      "
-    >
+  <Item variant="outline" class="h-full content-start gap-y-1">
+    <ItemMedia>
       <Avatar size="lg">
         <AvatarImage :src="linkIcon" alt="" loading="lazy" />
         <AvatarFallback>
@@ -41,21 +36,32 @@ async function copyLink() {
         </AvatarFallback>
       </Avatar>
     </ItemMedia>
-    <ItemContent class="min-w-0 flex-row items-center gap-6">
-      <h3 class="min-w-0">
-        <Button as-child variant="link" class="max-w-full justify-start">
-          <a :href="path" :title="displayName" :aria-label="$t('home.directory.open_label', { name: displayName })">
-            <span class="truncate">{{ displayName }}</span>
-          </a>
-        </Button>
+    <ItemContent class="min-w-0">
+      <h3 class="font-medium">
+        <a
+          :href="path"
+          :aria-label="$t('home.directory.open_label', { name: displayName })"
+          class="
+            wrap-anywhere text-primary underline-offset-4
+            hover:underline
+            focus-visible:underline
+          "
+        >
+          {{ displayName }}
+        </a>
       </h3>
       <ItemDescription
-        v-if="link.description" class="max-w-2/5 shrink-0 truncate" :title="link.description"
+        v-if="link.description" class="line-clamp-none wrap-anywhere"
       >
         {{ link.description }}
       </ItemDescription>
     </ItemContent>
-    <ItemActions class="shrink-0 gap-0">
+    <ItemActions
+      class="
+        shrink-0 basis-full justify-end gap-0
+        @sm/link-row:basis-auto
+      "
+    >
       <Button
         variant="ghost"
         size="icon"
