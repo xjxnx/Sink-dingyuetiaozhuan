@@ -27,16 +27,14 @@ const options = {
 const qrCode = new QRCodeStyling(options)
 const qrCodeEl = useTemplateRef<HTMLElement>('qrCodeEl')
 
-function updateColor(newColor: string) {
+watch([() => props.data, () => props.image, color], ([data, image, newColor]) => {
   qrCode.update({
+    data,
+    image,
     dotsOptions: { type: 'dots' as const, color: newColor },
     cornersSquareOptions: { type: 'extra-rounded' as const, color: newColor },
     cornersDotOptions: { type: 'dot' as const, color: newColor },
   })
-}
-
-watch(color, (newColor) => {
-  updateColor(newColor)
 })
 
 function downloadQRCode() {
